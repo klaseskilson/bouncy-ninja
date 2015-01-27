@@ -30,10 +30,22 @@ add_executable(${APP_NAME} ${bouncy_SOURCES})
 # pkg-config is a helper tool that helps you inser the correct 
 # compiler options
 #------------------------------------------------------------------
-find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
-
-pkg_search_module(GLFW REQUIRED glfw3)
+#------------------------------------------------------------------
+#IF WIN32 we use a custom FindGLFW.cmake and assign the variables/paths manually
+if (WIN32)
+	find_package(GLFW REQUIRED)
+	SET(GLFW_INCLUDE_DIRS
+		${GLFW_INCLUDE_DIR})
+	SET(GLFW_STATIC_LIBRARIES
+		${OPENGL_LIBRARY}
+		${GLFW_LIBRARIES}
+		)
+else()
+	#If not WIN32 we use PkgConfig to find GLFW
+	find_package(PkgConfig REQUIRED)
+	pkg_search_module(GLFW REQUIRED glfw3)
+endif()
 
 # get variable GLFW_INCLUDE_DIRS when searching module it contains 
 # paths to directories to the header files we want to include
