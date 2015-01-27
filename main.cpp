@@ -23,6 +23,12 @@ int main(void)
     while (!glfwWindowShouldClose(window))
     {
         /* Render here */
+        glLineWidth(2.5); 
+        glColor3f(1.0, 0.0, 0.0);
+        glBegin(GL_LINES);
+        glVertex3f(0.0, 0.0, 0.0);
+        glVertex3f(15, 0, 0);
+        glEnd();
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
