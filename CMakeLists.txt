@@ -32,16 +32,15 @@ add_executable(${APP_NAME} ${bouncy_SOURCES})
 #------------------------------------------------------------------
 find_package(OpenGL REQUIRED)
 #------------------------------------------------------------------
-#IF WIN32 we use a custom FindGLFW.cmake and assign the variables/paths manually
+# if WIN32 we use a custom FindGLFW.cmake and assign the 
+# variables/paths manually
 if (WIN32)
 	find_package(GLFW REQUIRED)
-	SET(GLFW_INCLUDE_DIRS
-		${GLFW_INCLUDE_DIR})
-	SET(GLFW_STATIC_LIBRARIES
-		${OPENGL_LIBRARY}
-		${GLFW_LIBRARIES}
-		)
+	SET(GLFW_INCLUDE_DIRS ${GLFW_INCLUDE_DIR})
+	SET(GLFW_STATIC_LIBRARIES ${OPENGL_LIBRARY} ${GLFW_LIBRARIES})
+
 else()
+
 	#If not WIN32 we use PkgConfig to find GLFW
 	find_package(PkgConfig REQUIRED)
 	pkg_search_module(GLFW REQUIRED glfw3)
