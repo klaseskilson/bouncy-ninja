@@ -18,10 +18,17 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 #------------------------------------------------------------------
 set(bouncy_SOURCES main.cpp)
 
+# create an executable file from sources, create it first,
+# then link the libraries
+#------------------------------------------------------------------
+add_executable(${APP_NAME} ${bouncy_SOURCES})
+
 # for a large number of source files it can be created using
 # file(GLOB bouncy_SOURCES *.cpp)
 
 # find packages that is required
+# pkg-config is a helper tool that helps you inser the correct 
+# compiler options
 #------------------------------------------------------------------
 find_package(PkgConfig REQUIRED)
 find_package(OpenGL REQUIRED)
@@ -33,17 +40,8 @@ pkg_search_module(GLFW REQUIRED glfw3)
 #------------------------------------------------------------------
 include_directories(${GLFW_INCLUDE_DIRS})
 
-# create an executable file from sources, create it first,
-# then link the libraries
-#------------------------------------------------------------------
-add_executable(${APP_NAME} ${bouncy_SOURCES})
-
 # GLFW_STATIC_LIBRARIES is also retrived when running search module
 # it contains all the external libraries that are needed
 #------------------------------------------------------------------
-target_link_libraries(${APP_NAME} 
-
-    ${GLFW_STATIC_LIBRARIES}
-
-)
+target_link_libraries(${APP_NAME} ${GLFW_STATIC_LIBRARIES})
 
