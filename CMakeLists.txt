@@ -7,8 +7,6 @@ project(${APP_NAME})
 # states the minimum version required
 #------------------------------------------------------------------
 cmake_minimum_required(VERSION 2.8)
-# use c++11
-SET(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
 
 # include the directory itself as a path to include directories
 # a directory is a file system cataloging structure which
@@ -50,11 +48,14 @@ endif()
 #------------------------------------------------------------------
 # OSX-specific requirements
 if(APPLE)
+  # use c++11
+  SET(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++")
   set(CMAKE_OSX_ARCHITECTURES "x86_64")
+  target_link_libraries(${APP_NAME} "-framework OpenGL")
+
   if(CMAKE_GENERATOR STREQUAL Xcode)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")
   endif()
-  target_link_libraries(${APP_NAME} "-framework OpenGL")
 endif()
 
 # get variable GLFW_INCLUDE_DIRS when searching module it contains
