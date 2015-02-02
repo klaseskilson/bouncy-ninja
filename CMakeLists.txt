@@ -40,6 +40,8 @@ if (WIN32)
 	find_package(GLFW REQUIRED)
 	SET(GLFW_INCLUDE_DIRS ${GLFW_INCLUDE_DIR})
 	SET(GLFW_STATIC_LIBRARIES ${OPENGL_LIBRARY} ${GLFW_LIBRARIES})
+  set(GLM_PATH "default value" CACHE PATH "GLM Path")
+  include_directories(${GLM_PATH})
 else()
   #If not WIN32 we use PkgConfig to find GLFW
   find_package(PkgConfig REQUIRED)
