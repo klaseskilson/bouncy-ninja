@@ -17,14 +17,14 @@ int main()
     return -1;
   }
 
-  #ifndef __APPLE__
+  #ifdef __APPLE__
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   #endif
 
-  GLFWwindow* window = glfwCreateWindow(640, 480, "Hello Triangle", NULL, NULL);
+  GLFWwindow* window = glfwCreateWindow(640, 480, "Bouncy Ninja", NULL, NULL);
   if (!window)
   {
     fprintf (stderr, "ERROR: could not open window with GLFW3\n");
@@ -67,7 +67,6 @@ int main()
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
   printf("\nLet's get ready to render!\n\n");
-
   while (!glfwWindowShouldClose(window)) {
 	  // wipe the drawing surface clear
 	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
