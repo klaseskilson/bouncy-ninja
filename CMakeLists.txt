@@ -22,6 +22,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #------------------------------------------------------------------
 set(bouncy_SOURCES main.cpp
   src/bouncy_helpers.cpp include/bouncy_helpers.h
+  src/GLShader.cpp include/GLShader.h
   )
 
 # create an executable file from sources, create it first,
