@@ -14,9 +14,15 @@ cmake_minimum_required(VERSION 2.8)
 #------------------------------------------------------------------
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+# set the output path to /bin
+#------------------------------------------------------------------
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
 # create a variable called .._SOURCES containing all .cpp files
 #------------------------------------------------------------------
-set(bouncy_SOURCES main.cpp)
+set(bouncy_SOURCES main.cpp
+  src/bouncy_helpers.cpp include/bouncy_helpers.h
+  )
 
 # create an executable file from sources, create it first,
 # then link the libraries
@@ -65,6 +71,7 @@ endif()
 # paths to directories to the header files we want to include
 #------------------------------------------------------------------
 include_directories(${GLFW_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS})
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # GLFW_STATIC_LIBRARIES is also retrived when running search module
 # it contains all the external libraries that are needed
