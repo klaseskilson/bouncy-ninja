@@ -69,8 +69,8 @@ int main()
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-  GLuint program = LoadShader("../shaders/main_vs.glsl", "../shaders/main_fs.glsl");
-  glUseProgram(program);
+  GLShader basicShader("../shaders/main_vs.glsl", "../shaders/main_fs.glsl");
+  glUseProgram(basicShader.programID);
 
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {

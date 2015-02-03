@@ -1,6 +1,26 @@
 #include "GLShader.h"
 
-std::string readFile(const char *filePath) {
+GLShader::GLShader()
+{
+	programID = 0;
+}
+
+//Constructor - create and compile both a vertex and fragment shader at once
+GLShader::GLShader(const char* vertex_path, const char* fragment_path)
+{
+	programID = LoadShader(vertex_path, fragment_path);
+}
+
+// Destructor
+GLShader::~GLShader()
+{
+	if (programID != 0)
+	{
+		glDeleteProgram(programID);
+	}
+}
+
+std::string GLShader::readFile(const char *filePath) {
   std::string content;
   std::ifstream fileStream(filePath, std::ios::in);
 
@@ -20,13 +40,14 @@ std::string readFile(const char *filePath) {
 }
 
 
-GLuint LoadShader(const char *vertex_path, const char *fragment_path) {
+GLuint GLShader::LoadShader(const char *vertex_path, const char *fragment_path) {
   GLuint vertShader = glCreateShader(GL_VERTEX_SHADER);
   GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
 
   // Read shaders
   std::string vertShaderStr = readFile(vertex_path);
   std::string fragShaderStr = readFile(fragment_path);
+
   const char *vertShaderSrc = vertShaderStr.c_str();
   const char *fragShaderSrc = fragShaderStr.c_str();
 

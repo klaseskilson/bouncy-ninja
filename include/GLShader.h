@@ -13,6 +13,25 @@
 #include <vector>
 #include <algorithm>
 
-GLuint LoadShader(const char *vertex_path, const char *fragment_path);
+class GLShader{
+	
+public:
+	GLuint programID;
 
+	GLShader();
+
+	//Constructor - create and compile both a vertex and fragment shader at once
+	GLShader(const char* vertexshaderfile, const char* fragmentshaderfile);
+
+	// Destructor
+	~GLShader();
+
+
+private:
+	std::string GLShader::readFile(const char *filePath);
+
+	GLuint LoadShader(const char *vertex_path, const char *fragment_path);
+
+
+};
 #endif // GLSHADER_H_
