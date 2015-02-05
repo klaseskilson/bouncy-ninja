@@ -8,6 +8,9 @@
 #include <glm/glm.hpp>
 #include <stdio.h>
 
+#include "bouncy_helpers.h"
+#include "GLShader.h"
+
 int main()
 {
   printf("Initiating...\n");
@@ -48,7 +51,6 @@ int main()
   glEnable(GL_DEPTH_TEST); // enable depth-testing
   glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
 
-
   float points[] = {
     0.0f, 0.5f, 0.0f,
     0.5f, -0.5f, 0.0f,
@@ -66,6 +68,9 @@ int main()
   glEnableVertexAttribArray(0);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+  GLShader basicShader("../shaders/main_vs.glsl", "../shaders/main_fs.glsl");
+  glUseProgram(basicShader.programID);
 
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
