@@ -53,7 +53,11 @@ int main()
   glEnable(GL_DEPTH_TEST); // enable depth-testing
   glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
 
+
+  GLShader* shader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
+  
   Vertex cube = Vertex();
+  Vertex::setShader(shader);
 
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {

@@ -17,17 +17,25 @@ public:
 	Vertex(glm::vec3 pos);
 	~Vertex();
 	
+	//Render debug cubes for debug mode
 	void draw();
 
+	//Set shader, ONLY USED WHEN IN DEBUG MODE.
+	static void setShader(GLShader* shader);
+
+	//Returns vertex position
 	glm::vec3 getPosition();
 
 private:
+
+	//Initializes each vertex with a box for debug purposes
+	void createDebugBox(float xsize, float ysize, float zsize);
 
 	glm::vec3 position;
 	double mass = 1;
 	std::vector<Vertex> connectedMasses;
 
-	GLShader* basicShader;
+	static GLShader* basicShader;
 	
 
 	//GL variables
