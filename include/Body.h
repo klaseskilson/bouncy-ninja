@@ -14,9 +14,10 @@ public:
 
   void draw();
   void toggleDebug() {mDebug = !mDebug;}
+
 private:
-  bool mDebug = false;
-  std::vector<Vertex*> mVertices;
+  bool mDebug = true;
+  std::vector<std::shared_ptr<Vertex>> mVertices;
 };
 
 #endif // BODY_H_

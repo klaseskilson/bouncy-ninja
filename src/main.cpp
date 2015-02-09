@@ -79,6 +79,7 @@ int main()
 	  glfwSwapBuffers(window);
   }
 
+  delete gBody;
   // close GL context and any other GLFW resources
   glfwTerminate();
   return 0;
