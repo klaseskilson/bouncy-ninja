@@ -1,4 +1,4 @@
-#version 130 compatibility
+#version 330
 in vec3 vp;
 
 void main()

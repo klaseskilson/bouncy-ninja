@@ -2,22 +2,22 @@
 
 GLShader::GLShader()
 {
-	programID = 0;
+  programID = 0;
 }
 
 //Constructor - create and compile both a vertex and fragment shader at once
 GLShader::GLShader(const char* vertex_path, const char* fragment_path)
 {
-	programID = LoadShader(vertex_path, fragment_path);
+  programID = LoadShader(vertex_path, fragment_path);
 }
 
 // Destructor
 GLShader::~GLShader()
 {
-	if (programID != 0)
-	{
-		glDeleteProgram(programID);
-	}
+  if (programID != 0)
+  {
+    glDeleteProgram(programID);
+  }
 }
 
 std::string GLShader::readFile(const char *filePath)
@@ -25,13 +25,15 @@ std::string GLShader::readFile(const char *filePath)
   std::string content;
   std::ifstream fileStream(filePath, std::ios::in);
 
-  if(!fileStream.is_open()) {
+  if(!fileStream.is_open())
+  {
     std::cerr << "Could not read file " << filePath << ". File does not exist." << std::endl;
     return "";
   }
 
   std::string line = "";
-  while(!fileStream.eof()) {
+  while(!fileStream.eof())
+  {
     std::getline(fileStream, line);
     content.append(line + "\n");
   }

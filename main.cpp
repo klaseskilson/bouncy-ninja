@@ -5,11 +5,11 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h> // GLFW helper library
-#include <glm/glm.hpp>
 #include <stdio.h>
 
 #include "bouncy_helpers.h"
 #include "GLShader.h"
+#include "Boundary.h"
 
 int main()
 {
@@ -17,7 +17,7 @@ int main()
   // start GL context and O/S window using the GLFW helper library
   if (!glfwInit())
   {
-    fprintf (stderr, "ERROR: could not start GLFW3\n");
+    fprintf(stderr, "ERROR: could not start GLFW3\n");
     return -1;
   }
 
@@ -32,7 +32,7 @@ int main()
   GLFWwindow* window = glfwCreateWindow(640, 480, "Bouncy Ninja", NULL, NULL);
   if (!window)
   {
-    fprintf (stderr, "ERROR: could not open window with GLFW3\n");
+    fprintf(stderr, "ERROR: could not open window with GLFW3\n");
     glfwTerminate();
     return 1;
   }
@@ -40,7 +40,7 @@ int main()
 
   // start GLEW extension handler
   glewExperimental = GL_TRUE;
-  glewInit ();
+  glewInit();
 
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
@@ -75,16 +75,16 @@ int main()
 
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
-	  // wipe the drawing surface clear
-	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	  //glUseProgram(shader_programme);
-	  glBindVertexArray(vao);
-	  // draw points 0-3 from the currently bound VAO with current in-use shader
-	  glDrawArrays(GL_TRIANGLES, 0, 3);
-	  // update other events like input handling
-	  glfwPollEvents();
-	  // put the stuff we've been drawing onto the display
-	  glfwSwapBuffers(window);
+    // wipe the drawing surface clear
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glUseProgram(shader_programme);
+    glBindVertexArray(vao);
+    // draw points 0-3 from the currently bound VAO with current in-use shader
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // update other events like input handling
+    glfwPollEvents();
+    // put the stuff we've been drawing onto the display
+    glfwSwapBuffers(window);
   }
 
   // close GL context and any other GLFW resources
