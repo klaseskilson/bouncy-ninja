@@ -5,7 +5,6 @@
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h> // GLFW helper library
-#include <glm/glm.hpp>
 #include <stdio.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
@@ -13,6 +12,7 @@
 #include "bouncy_helpers.h"
 #include "GLShader.h"
 #include "Vertex.h"
+#include "Boundary.h"
 
 int main()
 {
@@ -20,7 +20,7 @@ int main()
   // start GL context and O/S window using the GLFW helper library
   if (!glfwInit())
   {
-    fprintf (stderr, "ERROR: could not start GLFW3\n");
+    fprintf(stderr, "ERROR: could not start GLFW3\n");
     return -1;
   }
 
@@ -35,7 +35,7 @@ int main()
   GLFWwindow* window = glfwCreateWindow(640, 480, "Bouncy Ninja", NULL, NULL);
   if (!window)
   {
-    fprintf (stderr, "ERROR: could not open window with GLFW3\n");
+    fprintf(stderr, "ERROR: could not open window with GLFW3\n");
     glfwTerminate();
     return 1;
   }
@@ -43,7 +43,7 @@ int main()
 
   // start GLEW extension handler
   glewExperimental = GL_TRUE;
-  glewInit ();
+  glewInit();
 
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
