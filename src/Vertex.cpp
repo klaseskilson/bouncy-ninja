@@ -2,6 +2,8 @@
 
 Vertex::Vertex()
 {
+	basicShader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
+
 	position = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	// Our vertices. Tree consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
@@ -109,12 +111,34 @@ Vertex::Vertex(glm::vec3 pos)
 
 Vertex::~Vertex()
 {
-
+	delete basicShader;
 }
 
 void Vertex::draw()
 {
+
+	
+	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	// Camera matrix
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model!
+
+	// Our ModelViewProjection : multiplication of our 3 matrices
+	glm::mat4 MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
+
+	GLuint MatrixID = glGetUniformLocation(basicShader->programID, "MVP");
+	// Send our transformation to the currently bound shader,
+	// in the "MVP" uniform
+	// For each model you render, since the MVP will be different (at least the M part)
+	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+
 	glBindVertexArray(vao);
+	glUseProgram(basicShader->programID);
 	glDrawElements(GL_TRIANGLES, 3 * numberOfTriangles, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)
 	glBindVertexArray(0);

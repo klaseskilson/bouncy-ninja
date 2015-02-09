@@ -5,6 +5,10 @@
 #include <glm/glm.hpp>
 #include <GL/glew.h> 
 #include <vector>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
+
+#include "GLShader.h"
 
 class Vertex{
 public:
@@ -22,6 +26,9 @@ private:
 	glm::vec3 position;
 	double mass = 1;
 	std::vector<Vertex> connectedMasses;
+
+	GLShader* basicShader;
+	
 
 	//GL variables
 	GLuint vao;
