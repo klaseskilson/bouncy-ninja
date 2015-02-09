@@ -20,7 +20,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 
 # create a variable called .._SOURCES containing all .cpp files
 #------------------------------------------------------------------
-set(bouncy_SOURCES main.cpp
+set(bouncy_SOURCES
+  src/main.cpp
   src/bouncy_helpers.cpp include/bouncy_helpers.h
   src/GLShader.cpp include/GLShader.h
   src/Vertex.cpp include/Vertex.h
