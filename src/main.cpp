@@ -58,6 +58,7 @@ int main()
 
   Vertex cube = Vertex();
 
+  Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
 
   GLShader basicShader("../shaders/main.vert", "../shaders/main.frag");
   glUseProgram(basicShader.programID);
