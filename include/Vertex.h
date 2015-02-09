@@ -24,8 +24,13 @@ private:
 	std::vector<Vertex> connectedMasses;
 
 	//GL variables
-	GLuint vbo;
 	GLuint vao;
+	int numberOfVertices;
+	int numberOfTriangles;
+	GLuint vertexbuffer;
+	GLuint indexbuffer;
+	GLfloat *vertexarray;
+	GLuint *indexarray;
 };
 
 #endif
