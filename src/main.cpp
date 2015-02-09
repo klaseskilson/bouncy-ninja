@@ -7,10 +7,15 @@
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <stdio.h>
 
-
 #include "bouncy_helpers.h"
-#include "Vertex.h"
+
+#include "Body.h"
 #include "Boundary.h"
+#include "Vertex.h"
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+Body* gBody;
 
 int main()
 {
@@ -43,6 +48,9 @@ int main()
   glewExperimental = GL_TRUE;
   glewInit();
 
+  // setup key events
+  glfwSetKeyCallback(window, key_callback);
+
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
   const GLubyte* version = glGetString(GL_VERSION); // version as a string
@@ -53,17 +61,17 @@ int main()
   glEnable(GL_DEPTH_TEST); // enable depth-testing
   glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
 
-  Vertex cube = Vertex();
+  gBody = new Body();
 
   Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
 
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
-	  // wipe the drawing surface clear
-	  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	  //glUseProgram(shader_programme);
+    // wipe the drawing surface clear
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glUseProgram(shader_programme);
 
-	  cube.draw();
+    gBody->draw();
 
 	  // update other events like input handling
 	  glfwPollEvents();
@@ -74,4 +82,17 @@ int main()
   // close GL context and any other GLFW resources
   glfwTerminate();
   return 0;
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+  {
+    glfwSetWindowShouldClose(window, GL_TRUE);
+  }
+  if (key == GLFW_KEY_D && action == GLFW_PRESS)
+  {
+    std::cout << "Toggling debug!" << std::endl;
+    gBody->toggleDebug();
+  }
 }

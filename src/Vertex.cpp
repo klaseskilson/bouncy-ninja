@@ -82,7 +82,7 @@ Vertex::Vertex()
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
 	glEnableVertexAttribArray(2);
-	
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
 		8 * sizeof(GLfloat), (void*)0); // xyz coordinates
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
@@ -116,8 +116,6 @@ Vertex::~Vertex()
 
 void Vertex::draw()
 {
-
-	
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
 	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 	// Camera matrix
