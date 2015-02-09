@@ -20,7 +20,8 @@ GLShader::~GLShader()
 	}
 }
 
-std::string GLShader::readFile(const char *filePath) {
+std::string GLShader::readFile(const char *filePath)
+{
   std::string content;
   std::ifstream fileStream(filePath, std::ios::in);
 

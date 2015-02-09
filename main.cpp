@@ -22,6 +22,7 @@ int main()
   }
 
   #ifdef __APPLE__
+    // force opengl verison for os x
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -69,7 +70,7 @@ int main()
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-  GLShader basicShader("../shaders/main_vs.glsl", "../shaders/main_fs.glsl");
+  GLShader basicShader("../shaders/main.vert", "../shaders/main.frag");
   glUseProgram(basicShader.programID);
 
   printf("\nLet's get ready to render!\n\n");

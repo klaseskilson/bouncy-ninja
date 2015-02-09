@@ -1,4 +1,4 @@
-#version 130
+#version 130 compatibility
 out vec4 frag_colour;
 
 void main()
