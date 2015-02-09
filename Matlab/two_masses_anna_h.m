@@ -38,5 +38,8 @@ for n=2:N
   end
 figure(1)
 plot(x);
+title('Horizontal movement with 2 masses');
+xlabel('Number of samples');
+ylabel('Position');
 
 

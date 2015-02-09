@@ -61,10 +61,16 @@ int main()
   glEnable(GL_DEPTH_TEST); // enable depth-testing
   glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
 
+
+  GLShader* shader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
+  
+  Vertex cube = Vertex();
+  Vertex::setShader(shader);
+
   gBody = new Body();
 
   Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
-
+  
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
     // wipe the drawing surface clear

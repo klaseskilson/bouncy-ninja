@@ -4,17 +4,17 @@
 clear all
 close all
 
-% m ï¿½r massa
+% m är massa
 m = 2;
 
-% h ï¿½r en steglï¿½ngd
-% k ï¿½r fjï¿½derkonstant
-% d ï¿½r dï¿½mpningskonstant
-h = 0.01; % steglÃ¤ngd
+% h är en steglï¿½ngd
+% k är fjäderkonstant
+% d är dämpningskonstant
+h = 0.01; % steglängd
 g = 9.81; % gravitation
-k = 20; % fjÃ¤derkonstant
-b = 0.4; % dÃ¤mpningskonstant
-l = 10; % lÃ¤ngden frÃ¥n jÃ¤mviktslÃ¤get
+k = 20; % fjäderkonstant
+b = 0.4; % dämpningskonstant
+l = 10; % längden från jämviktsläget
 
 %Number of samples
 N = 3000;
@@ -23,7 +23,7 @@ N = 3000;
 M = 8;
 
 x = zeros(N,M); % allokera minne
-%begynnelsevï¿½rde
+%begynnelsevärden
 x(1,1) = -1;
 x(1,2) = 0;
 x(1,3) = 0;
@@ -51,5 +51,7 @@ for n=2:N
   end
 figure(1)
 plot(x);
-
+title('Horizontal movement with 8 masses');
+xlabel('Number of samples');
+ylabel('Position');
 
