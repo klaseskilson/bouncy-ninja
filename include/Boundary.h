@@ -14,12 +14,22 @@ public:
    *
    * glm::vec3  first   the first corner
    * glm::vec3  second  the second corner
+   *
+   * like this:
+   *      +------+ (b)
+   *    .'|    .'|
+   *  +---+--+'  |
+   *  |   |  |   |
+   *  |   +--+---+
+   *  | .'   | .'
+   *  +------+'
+   *  ^(a)
    */
   Boundary(glm::vec3 a, glm::vec3 b)
     : first(a), second(b) {}
 
   // destructor
-  ~Boundary(){};
+  ~Boundary() {}
 
 private:
   glm::vec3 first, second;
