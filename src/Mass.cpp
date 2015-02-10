@@ -1,7 +1,7 @@
-#include "Vertex.h"
-GLShader*  Vertex::basicShader;
+#include "Mass.h"
+GLShader*  Mass::basicShader;
 
-Vertex::Vertex()
+Mass::Mass()
 {
 	mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -10,26 +10,32 @@ Vertex::Vertex()
 	
 }
 
-Vertex::Vertex(glm::vec3 pos)
+Mass::Mass(glm::vec3 pos)
 {
 	mPosition = pos;
 	createDebugBox(1.0f, 1.0f, 1.0f);
 }
 
-Vertex::~Vertex()
+Mass::~Mass()
 {
 
 }
 
-void Vertex::draw()
+
+void Mass::update()
+{
+
+}
+
+void Mass::draw()
 {
 	//Update the transformation
 	mTransform = glm::mat4(glm::translate(mPosition));
 
-	glUseProgram(Vertex::getShader()->programID);
+	glUseProgram(Mass::getShader()->programID);
 
 	// Send our transformation to the currently bound shader
-	GLuint transformID = glGetUniformLocation(Vertex::getShader()->programID, "M");
+	GLuint transformID = glGetUniformLocation(Mass::getShader()->programID, "M");
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &mTransform[0][0]);
 	
 	glBindVertexArray(vao);
@@ -39,23 +45,23 @@ void Vertex::draw()
 }
 
 
-void Vertex::setShader(GLShader* shader)
+void Mass::setShader(GLShader* shader)
 {
 	basicShader = shader;
 }
 
-GLShader* Vertex::getShader()
+GLShader* Mass::getShader()
 {
 	return basicShader;
 }
 
-glm::vec3 Vertex::getPosition()
+glm::vec3 Mass::getPosition()
 {
 	return mPosition;
 }
 
 
-void Vertex::createDebugBox(float xsize, float ysize, float zsize)
+void Mass::createDebugBox(float xsize, float ysize, float zsize)
 {
 	GLfloat vertex_array_data[] = {
 		//fram

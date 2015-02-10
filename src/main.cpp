@@ -11,7 +11,7 @@
 
 #include "Body.h"
 #include "Boundary.h"
-#include "Vertex.h"
+#include "Mass.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
@@ -66,9 +66,7 @@ int main()
 
 
   GLShader* shader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
-  
-  Vertex cube = Vertex();
-  Vertex::setShader(shader);
+  Mass::setShader(shader);
 
   updateCamera();
 
@@ -112,7 +110,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void updateCamera()
 {
 	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glUseProgram(Vertex::getShader()->programID);
+	glUseProgram(Mass::getShader()->programID);
 	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 	// Camera matrix
 	glm::mat4 View = glm::lookAt(
@@ -121,8 +119,8 @@ void updateCamera()
 		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
 		);
 
-	GLuint MatrixIDV = glGetUniformLocation(Vertex::getShader()->programID, "V");
-	GLuint MatrixIDP = glGetUniformLocation(Vertex::getShader()->programID, "P");
+	GLuint MatrixIDV = glGetUniformLocation(Mass::getShader()->programID, "V");
+	GLuint MatrixIDP = glGetUniformLocation(Mass::getShader()->programID, "P");
 
 	glUniformMatrix4fv(MatrixIDV, 1, GL_FALSE, &View[0][0]);
 	glUniformMatrix4fv(MatrixIDP, 1, GL_FALSE, &Projection[0][0]);
