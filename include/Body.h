@@ -3,6 +3,8 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <iterator>
+#include <memory>
 
 #include "Vertex.h"
 

@@ -2,7 +2,8 @@
 
 Body::Body()
 {
-  mVertices.push_back(std::shared_ptr<Vertex>(new Vertex));
+	mVertices.push_back(std::shared_ptr<Vertex>(new Vertex));
+	mVertices.push_back(std::shared_ptr<Vertex>(new Vertex(glm::vec3(2.0f,0.0f,0.0f))));
 }
 
 Body::~Body()

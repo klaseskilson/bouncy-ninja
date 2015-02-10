@@ -15,6 +15,9 @@
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+void updateCamera();
+
+
 Body* gBody;
 
 int main()
@@ -67,6 +70,8 @@ int main()
   Vertex cube = Vertex();
   Vertex::setShader(shader);
 
+  updateCamera();
+
   gBody = new Body();
 
   Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
@@ -102,4 +107,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     std::cout << "Toggling debug!" << std::endl;
     gBody->toggleDebug();
   }
+}
+
+void updateCamera()
+{
+	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+	glUseProgram(Vertex::getShader()->programID);
+	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+	// Camera matrix
+	glm::mat4 View = glm::lookAt(
+		glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
+		glm::vec3(0, 0, 0), // and looks at the origin
+		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
+		);
+
+	GLuint MatrixIDV = glGetUniformLocation(Vertex::getShader()->programID, "V");
+	GLuint MatrixIDP = glGetUniformLocation(Vertex::getShader()->programID, "P");
+
+	glUniformMatrix4fv(MatrixIDV, 1, GL_FALSE, &View[0][0]);
+	glUniformMatrix4fv(MatrixIDP, 1, GL_FALSE, &Projection[0][0]);
 }
