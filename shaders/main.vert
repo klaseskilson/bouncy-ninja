@@ -8,10 +8,14 @@ out vec3 interpolatedNormal;
 
 uniform mat4 MVP;
 
+uniform mat4 M;
+uniform mat4 V;
+uniform mat4 P;
+
 void main()
 {
   interpolatedNormal = normal;
   vec3 lightPos = vec3(-3.0, -3.0, 3.0);
   toLight = normalize(lightPos - position);
-  gl_Position = MVP * vec4(position, 1.0);
+  gl_Position = (P * V * M) * vec4(position, 1.0);
 }

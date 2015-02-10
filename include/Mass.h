@@ -1,5 +1,5 @@
-#ifndef VERTEX_H_
-#define VERTEX_H_
+#ifndef MASS_H_
+#define MASS_H_
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -10,18 +10,24 @@
 
 #include "GLShader.h"
 
-class Vertex{
+class Mass{
 public:
+	//Constructors
+	Mass();
+	Mass(glm::vec3 pos);
 
-	Vertex();
-	Vertex(glm::vec3 pos);
-	~Vertex();
-	
+	//Destructor
+	~Mass();
+
+	//Update the simulation
+	void update();
+
 	//Render debug cubes for debug mode
 	void draw();
 
 	//Set shader, ONLY USED WHEN IN DEBUG MODE.
 	static void setShader(GLShader* shader);
+	static GLShader* getShader();
 
 	//Returns vertex position
 	glm::vec3 getPosition();
@@ -29,14 +35,13 @@ public:
 	//Initializes each vertex with a box for debug purposes
 	void createDebugBox(float xsize, float ysize, float zsize);
 
-
-	
-	
 private:
-	static GLShader* basicShader;
-  glm::vec3 position;
-  double mass = 1;
-  std::vector<Vertex> connectedMasses;
+  static GLShader* basicShader;
+
+  glm::vec3 mPosition;
+  glm::mat4 mTransform;
+  double mMass = 1;
+  std::vector<Mass> mConnectedMasses;
 
   //GL variables
   GLuint vao;

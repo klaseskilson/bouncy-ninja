@@ -3,8 +3,10 @@
 
 #include <glm/glm.hpp>
 #include <vector>
+#include <iterator>
+#include <memory>
 
-#include "Vertex.h"
+#include "Mass.h"
 
 class Body
 {
@@ -13,11 +15,12 @@ public:
   ~Body();
 
   void draw();
-  void toggleDebug() {mDebug = !mDebug;}
+  void move();
+  static void toggleDebug() {mDebug = !mDebug;}
 
 private:
-  bool mDebug = true;
-  std::vector<std::shared_ptr<Vertex>> mVertices;
+  static bool mDebug;
+  std::vector<std::shared_ptr<Mass>> mMasses;
 };
 
 #endif // BODY_H_

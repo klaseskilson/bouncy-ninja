@@ -1,68 +1,65 @@
-#include "Vertex.h"
-GLShader*  Vertex::basicShader;
+#include "Mass.h"
+GLShader*  Mass::basicShader;
 
-Vertex::Vertex()
+Mass::Mass()
 {
-	position = glm::vec3(0.0f, 0.0f, 0.0f);
+	mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	createDebugBox(1.0f, 1.0f, 1.0f);
-
-	
 }
 
-Vertex::Vertex(glm::vec3 pos)
+Mass::Mass(glm::vec3 pos)
 {
-	position = pos;
+	mPosition = pos;
+	createDebugBox(1.0f, 1.0f, 1.0f);
 }
 
-Vertex::~Vertex()
+Mass::~Mass()
 {
 
 }
 
-void Vertex::draw()
+
+void Mass::update()
 {
 
-	
-	// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-	glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-	// Camera matrix
-	glm::mat4 View = glm::lookAt(
-		glm::vec3(4, 3, 3), // Camera is at (4,3,3), in World Space
-		glm::vec3(0, 0, 0), // and looks at the origin
-		glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
-		);
-	glm::mat4 Model = glm::mat4(1.0f);  // Changes for each model!
+}
 
-	// Our ModelViewProjection : multiplication of our 3 matrices
-	glm::mat4 MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
+void Mass::draw()
+{
+	//Update the transformation
+	mTransform = glm::mat4(glm::translate(mPosition));
 
-	GLuint MatrixID = glGetUniformLocation(Vertex::basicShader->programID, "MVP");
-	// Send our transformation to the currently bound shader,
-	// in the "MVP" uniform
-	// For each model you render, since the MVP will be different (at least the M part)
-	glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+	glUseProgram(Mass::getShader()->programID);
+
+	// Send our transformation to the currently bound shader
+	GLuint transformID = glGetUniformLocation(Mass::getShader()->programID, "M");
+	glUniformMatrix4fv(transformID, 1, GL_FALSE, &mTransform[0][0]);
 
 	glBindVertexArray(vao);
-	glUseProgram(Vertex::basicShader->programID);
-	glDrawElements(GL_TRIANGLES, 3 * numberOfTriangles, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)
+	glDrawElements(GL_TRIANGLES, 3 * numberOfTriangles, GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
 }
 
 
-void Vertex::setShader(GLShader* shader)
+void Mass::setShader(GLShader* shader)
 {
 	basicShader = shader;
 }
 
-glm::vec3 Vertex::getPosition()
+GLShader* Mass::getShader()
 {
-	return position;
+	return basicShader;
+}
+
+glm::vec3 Mass::getPosition()
+{
+	return mPosition;
 }
 
 
-void Vertex::createDebugBox(float xsize, float ysize, float zsize)
+void Mass::createDebugBox(float xsize, float ysize, float zsize)
 {
 	GLfloat vertex_array_data[] = {
 		//fram
