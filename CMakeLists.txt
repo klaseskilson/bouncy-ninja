@@ -68,6 +68,19 @@ if(APPLE)
   target_link_libraries(${APP_NAME} "-framework OpenGL")
 
   if(CMAKE_GENERATOR STREQUAL Xcode)
+    find_library(COCOA_LIBRARY Cocoa REQUIRED)
+    find_library(IOKIT_LIBRARY IOKit REQUIRED)
+    find_library(COREVIDEO_LIBRARY CoreVideo REQUIRED)
+    find_library(CARBON_LIBRARY Carbon REQUIRED)
+
+    set(LIBS
+      ${OPENGL_LIBRARY}
+      ${COCOA_LIBRARY}
+      ${IOKIT_LIBRARY}
+      ${COREVIDEO_LIBRARY}
+      ${CARBON_LIBRARY}
+    )
+
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.8")
   endif()
 endif()
@@ -81,5 +94,5 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # GLFW_STATIC_LIBRARIES is also retrived when running search module
 # it contains all the external libraries that are needed
 #------------------------------------------------------------------
-target_link_libraries(${APP_NAME} ${GLEW_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
+target_link_libraries(${APP_NAME} ${GLEW_LIBRARIES} ${GLFW_STATIC_LIBRARIES} ${LIBS})
 
