@@ -35,9 +35,6 @@ public:
 	//Initializes each vertex with a box for debug purposes
 	void createDebugBox(float xsize, float ysize, float zsize);
 
-
-	
-	
 private:
   static GLShader* basicShader;
   
