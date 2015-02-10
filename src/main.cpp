@@ -14,11 +14,7 @@
 #include "Vertex.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
 void updateCamera();
-
-
-Body* gBody;
 
 int main()
 {
@@ -66,31 +62,29 @@ int main()
 
 
   GLShader* shader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
-  
+
   Vertex cube = Vertex();
   Vertex::setShader(shader);
 
   updateCamera();
 
-  gBody = new Body();
+  Body theBody = Body();
 
   Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
-  
+
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
     // wipe the drawing surface clear
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //glUseProgram(shader_programme);
 
-    gBody->draw();
+    theBody.draw();
 
 	  // update other events like input handling
 	  glfwPollEvents();
 	  // put the stuff we've been drawing onto the display
 	  glfwSwapBuffers(window);
   }
-
-  delete gBody;
   // close GL context and any other GLFW resources
   glfwTerminate();
   return 0;
@@ -105,7 +99,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if (key == GLFW_KEY_D && action == GLFW_PRESS)
   {
     std::cout << "Toggling debug!" << std::endl;
-    gBody->toggleDebug();
+    Body::toggleDebug();
   }
 }
 

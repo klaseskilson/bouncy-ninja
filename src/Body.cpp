@@ -1,4 +1,5 @@
 #include "Body.h"
+bool Body::mDebug = true;
 
 Body::Body()
 {

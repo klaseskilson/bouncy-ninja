@@ -16,10 +16,10 @@ public:
 
   void draw();
   void move();
-  void toggleDebug() {mDebug = !mDebug;}
+  static void toggleDebug() {mDebug = !mDebug;}
 
 private:
-  bool mDebug = true;
+  static bool mDebug;
   std::vector<std::shared_ptr<Vertex>> mVertices;
 };
 

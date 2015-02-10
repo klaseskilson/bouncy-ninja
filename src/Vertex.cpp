@@ -6,8 +6,6 @@ Vertex::Vertex()
 	mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	createDebugBox(1.0f, 1.0f, 1.0f);
-
-	
 }
 
 Vertex::Vertex(glm::vec3 pos)
@@ -31,7 +29,7 @@ void Vertex::draw()
 	// Send our transformation to the currently bound shader
 	GLuint transformID = glGetUniformLocation(Vertex::getShader()->programID, "M");
 	glUniformMatrix4fv(transformID, 1, GL_FALSE, &mTransform[0][0]);
-	
+
 	glBindVertexArray(vao);
 	// (mode, vertex count, type, element array buffer offset)
 	glDrawElements(GL_TRIANGLES, 3 * numberOfTriangles, GL_UNSIGNED_INT, (void*)0);
