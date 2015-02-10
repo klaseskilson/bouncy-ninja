@@ -12,9 +12,11 @@
 
 class Vertex{
 public:
-
+	//Constructors
 	Vertex();
 	Vertex(glm::vec3 pos);
+	
+	//Destructor
 	~Vertex();
 	
 	//Render debug cubes for debug mode
@@ -23,6 +25,7 @@ public:
 	//Set shader, ONLY USED WHEN IN DEBUG MODE.
 	static void setShader(GLShader* shader);
 
+	static GLShader* getShader();
 	//Returns vertex position
 	glm::vec3 getPosition();
 
@@ -33,10 +36,12 @@ public:
 	
 	
 private:
-	static GLShader* basicShader;
-  glm::vec3 position;
-  double mass = 1;
-  std::vector<Vertex> connectedMasses;
+  static GLShader* basicShader;
+  
+  glm::vec3 mPosition;
+  glm::mat4 mTransform;
+  double mMass = 1;
+  std::vector<Vertex> mConnectedMasses;
 
   //GL variables
   GLuint vao;
