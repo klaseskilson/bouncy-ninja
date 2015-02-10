@@ -1,5 +1,5 @@
-#ifndef VERTEX_H_
-#define VERTEX_H_
+#ifndef MASS_H_
+#define MASS_H_
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -10,14 +10,17 @@
 
 #include "GLShader.h"
 
-class Vertex{
+class Mass{
 public:
 	//Constructors
-	Vertex();
-	Vertex(glm::vec3 pos);
+	Mass();
+	Mass(glm::vec3 pos);
 
 	//Destructor
-	~Vertex();
+	~Mass();
+
+	//Update the simulation
+	void update();
 
 	//Render debug cubes for debug mode
 	void draw();
@@ -38,7 +41,7 @@ private:
   glm::vec3 mPosition;
   glm::mat4 mTransform;
   double mMass = 1;
-  std::vector<Vertex> mConnectedMasses;
+  std::vector<Mass> mConnectedMasses;
 
   //GL variables
   GLuint vao;

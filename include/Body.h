@@ -6,7 +6,7 @@
 #include <iterator>
 #include <memory>
 
-#include "Vertex.h"
+#include "Mass.h"
 
 class Body
 {
@@ -20,7 +20,7 @@ public:
 
 private:
   static bool mDebug;
-  std::vector<std::shared_ptr<Vertex>> mVertices;
+  std::vector<std::shared_ptr<Mass>> mMasses;
 };
 
 #endif // BODY_H_
