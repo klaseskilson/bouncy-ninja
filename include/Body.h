@@ -13,6 +13,7 @@ public:
   ~Body();
 
   void draw();
+  void move();
   void toggleDebug() {mDebug = !mDebug;}
 
 private:

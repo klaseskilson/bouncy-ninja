@@ -16,7 +16,7 @@ public:
 	Vertex();
 	Vertex(glm::vec3 pos);
 	~Vertex();
-	
+
 	//Render debug cubes for debug mode
 	void draw();
 
@@ -29,9 +29,6 @@ public:
 	//Initializes each vertex with a box for debug purposes
 	void createDebugBox(float xsize, float ysize, float zsize);
 
-
-	
-	
 private:
 	static GLShader* basicShader;
   glm::vec3 position;
