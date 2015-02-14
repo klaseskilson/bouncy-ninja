@@ -15,6 +15,7 @@ public:
   ~Body();
 
   void draw();
+  void update(float timeDelta);
   void move();
   static void toggleDebug() {mDebug = !mDebug;}
 

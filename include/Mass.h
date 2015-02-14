@@ -7,7 +7,9 @@
 #include <vector>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <iostream>
 
+#include "bouncy_helpers.h"
 #include "GLShader.h"
 
 class Mass{
@@ -20,10 +22,13 @@ public:
 	~Mass();
 
 	//Update the simulation
-	void update();
+	void update(float timeDelta);
 
 	//Render debug cubes for debug mode
 	void draw();
+
+	//Connect with another mass
+	void connectMass(Mass* m);
 
 	//Set shader, ONLY USED WHEN IN DEBUG MODE.
 	static void setShader(GLShader* shader);
@@ -32,16 +37,23 @@ public:
 	//Returns vertex position
 	glm::vec3 getPosition();
 
+	glm::vec3 getVelocity();
+	//Set velocity
+	void setVelocity(glm::vec3 v);
+
+
 	//Initializes each vertex with a box for debug purposes
 	void createDebugBox(float xsize, float ysize, float zsize);
 
 private:
   static GLShader* basicShader;
 
+  glm::vec3 mVelocity;
+
   glm::vec3 mPosition;
   glm::mat4 mTransform;
-  double mMass = 1;
-  std::vector<Mass> mConnectedMasses;
+  float mMass = 1;
+  std::vector<Mass*> mConnectedMasses;
 
   //GL variables
   GLuint vao;
