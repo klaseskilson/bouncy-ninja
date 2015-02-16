@@ -62,6 +62,7 @@ Body::Body()
 Body::~Body()
 {
     mMasses.clear();
+    mBoundaries.clear();
 }
 
 void Body::draw()
@@ -83,3 +84,7 @@ void Body::update(float timeDelta)
     }
 }
 
+void Body::addBoundary(std::shared_ptr<Boundary> b)
+{
+    mBoundaries.push_back(b);
+}

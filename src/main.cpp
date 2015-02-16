@@ -73,12 +73,13 @@ int main()
 
   Body theBody = Body();
 
-  Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
+  std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f)));
+  theBody.addBoundary(floor);
 
   float timeDelta = glfwGetTime();
   printf("\nLet's get ready to render!\n\n");
-  while (!glfwWindowShouldClose(window)) {
-
+  while (!glfwWindowShouldClose(window))
+  {
     // wipe the drawing surface clear
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

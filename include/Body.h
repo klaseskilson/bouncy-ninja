@@ -7,21 +7,24 @@
 #include <memory>
 
 #include "Mass.h"
+#include "Boundary.h"
 
 class Body
 {
 public:
-  Body();
-  ~Body();
+    Body();
+    ~Body();
 
-  void draw();
-  void update(float timeDelta);
-  void move();
-  static void toggleDebug() {mDebug = !mDebug;}
+    void draw();
+    void update(float timeDelta);
+    void move();
+    void addBoundary(std::shared_ptr<Boundary>);
+    static void toggleDebug() {mDebug = !mDebug;}
 
 private:
-  static bool mDebug;
-  std::vector<std::shared_ptr<Mass>> mMasses;
+    static bool mDebug;
+    std::vector<std::shared_ptr<Mass>> mMasses;
+    std::vector<std::shared_ptr<Boundary>> mBoundaries;
 };
 
 #endif // BODY_H_

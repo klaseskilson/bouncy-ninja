@@ -21,7 +21,7 @@ Mass::Mass(glm::vec3 pos, float spring, float dampening)
 
 Mass::~Mass()
 {
-
+    std::cout << "Destroying Mass at " << mPosition << std::endl;
 }
 
 
