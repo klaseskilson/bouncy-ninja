@@ -14,63 +14,63 @@
 
 class Mass{
 public:
-  //Constructors
-  Mass();
-  Mass(glm::vec3 pos, float spring = 10.0f, float dampening = 0.4f);
+    //Constructors
+    Mass();
+    Mass(glm::vec3 pos, float spring = 10.0f, float dampening = 0.4f);
 
-  //Destructor
-  ~Mass();
+    //Destructor
+    ~Mass();
 
-  //Update the simulation
-  void update(float timeDelta);
+    //Update the simulation
+    void update(float timeDelta);
 
-  //Render debug cubes for debug mode
-  void draw();
+    //Render debug cubes for debug mode
+    void draw();
 
-  //Connect with another mass
-  void connectMass(Mass* m);
+    //Connect with another mass
+    void connectMass(Mass* m);
 
-  //Set shader, ONLY USED WHEN IN DEBUG MODE.
-  static void setShader(GLShader* shader);
-  static GLShader* getShader();
+    //Set shader, ONLY USED WHEN IN DEBUG MODE.
+    static void setShader(GLShader* shader);
+    static GLShader* getShader();
 
-  //Returns vertex position
-  glm::vec3 getPosition();
-  glm::vec3 getInitialPosition();
+    //Returns vertex position
+    glm::vec3 getPosition();
+    glm::vec3 getInitialPosition();
 
-  glm::vec3 getVelocity();
-  //Set velocity
-  void setVelocity(glm::vec3 v);
+    glm::vec3 getVelocity();
+    //Set velocity
+    void setVelocity(glm::vec3 v);
 
 
-  //Initializes each vertex with a box for debug purposes
-  void createDebugBox(float xsize, float ysize, float zsize);
+    //Initializes each vertex with a box for debug purposes
+    void createDebugBox(float xsize, float ysize, float zsize);
 
-  void explicitEuler(glm::vec3 force, float h);
-  void implicitEuler(glm::vec3 force, float h);
+    void explicitEuler(glm::vec3 force, float h);
+    void implicitEuler(glm::vec3 force, float h);
 
-  std::vector<Mass*> mConnectedMasses;
+    std::vector<Mass*> mConnectedMasses;
 
 private:
-  static GLShader* basicShader;
+    static GLShader* basicShader;
 
-  glm::vec3 mVelocity;
+    glm::vec3 mVelocity;
 
-  glm::vec3 mPosition;
-  glm::vec3 mInitialPosition;
-  glm::mat4 mTransform;
+    glm::vec3 mPosition;
+    glm::vec3 mInitialPosition;
+    glm::mat4 mTransform;
 
-  float mMass = 1.0f;
-  float mSpringConstant, mDampeningConstant;
+    float mMass = 1.0f;
+    float mSpringConstant, mDampeningConstant;
 
-  //GL variables
-  GLuint vao;
-  int numberOfVertices;
-  int numberOfTriangles;
-  GLuint vertexbuffer;
-  GLuint indexbuffer;
-  GLfloat *vertexarray;
-  GLuint *indexarray;
+    //GL variables
+    GLuint vao;
+    int numberOfVertices;
+    int numberOfTriangles;
+    GLuint vertexbuffer;
+    GLuint indexbuffer;
+    GLfloat *vertexarray;
+    GLuint *indexarray;
 };
 
 #endif
