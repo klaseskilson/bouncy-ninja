@@ -25,52 +25,51 @@ Mass::~Mass()
 
 void Mass::update(float timeDelta)
 {
-  glm::vec3 F = glm::vec3(0.0f,0.0f,0.0f);
+  glm::vec3 F = glm::vec3(0.0f);
   float k = 10.0f;
   float b = 0.4f;
 
-
-  // float springLength = 2.0f;
-  //For each connected mass, calculate the force
+  // For each connected mass, calculate the force
   for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
   {
-    //vektor i riktning p2 -> p1
+    // vector from this point to the (*it) point
     glm::vec3 toPoint = (*it)->getPosition() - mPosition;
 
-    float springLength = glm::length(((*it)->getInitialPosition() - mInitialPosition));
+    // get the length of the spring in rest
+    float springLength = glm::length((*it)->getInitialPosition() - mInitialPosition);
 
-    //fjäderns viloläge i vektorform
+    // the spring's initial position as a vector
     glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
-    //Spring force
+    // Spring force
     F += (toPoint - springVector) * k;
 
-    //Difference in velocity in the direction of the spring
-    glm::vec3 velocityDifference = glm::length((*it)->getVelocity() - mVelocity)*glm::normalize(toPoint);
+    // Difference in velocity in the direction of the spring
+    glm::vec3 velocityDifference = glm::length((*it)->getVelocity() - mVelocity) * glm::normalize(toPoint);
 
     //Damping
     F = F + (velocityDifference) * b;
   }
 
-    //EULER
-    implicitEuler(F, timeDelta);
+  //EULER
+  implicitEuler(F, timeDelta);
 }
 
 void Mass::explicitEuler(glm::vec3 force, float h)
 {
-	glm::vec3 a = force / mMass;
-  	mVelocity = mVelocity + a * h;
-  	//std::cout << mVelocity << "\n";
-  	mPosition = mPosition + mVelocity * h;
+  glm::vec3 a = force / mMass;
+  mVelocity = mVelocity + a * h;
+  //std::cout << mVelocity << "\n";
+  mPosition = mPosition + mVelocity * h;
 }
 
 void Mass::implicitEuler(glm::vec3 force, float h)
 {
-    glm::vec3 a = force / mMass;
-    glm::vec3 aNext = a + a * h;
-    mVelocity = mVelocity + aNext * h;
-    //std::cout << mVelocity << "\n";
-    mPosition = mPosition + mVelocity * h;
+  glm::vec3 a = force / mMass;
+  glm::vec3 aNext = a + a * h;
+  mVelocity = mVelocity + aNext * h;
+  //std::cout << mVelocity << "\n";
+  mPosition = mPosition + mVelocity * h;
 }
 
 void Mass::connectMass(Mass* m)
@@ -82,7 +81,7 @@ void Mass::connectMass(Mass* m)
 
 void Mass::draw()
 {
-  //Update the transformation
+  // Update the transformation
   mTransform = glm::mat4(glm::translate(mPosition));
 
   glUseProgram(Mass::getShader()->programID);
