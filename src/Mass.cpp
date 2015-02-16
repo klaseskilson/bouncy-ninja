@@ -11,7 +11,7 @@ Mass::Mass()
 Mass::Mass(glm::vec3 pos)
 {
 	mPosition = pos;
-	createDebugBox(1.0f, 1.0f, 1.0f);
+	createDebugBox(0.5f, 0.5f, 0.5f);
 	mVelocity = glm::vec3(0.0f);
 }
 
@@ -25,11 +25,11 @@ void Mass::update(float timeDelta)
 {
 
 	glm::vec3 F = glm::vec3(0.0f,0.0f,0.0f);
-	float k = 20.0f;
-	float d = 0.5f;
+	float k = 10.0f;
+	float d = 0.4f;
 
 	
-	float springLength = 1.5f;
+	float springLength = 2.0f;
 	//For each connected mass, calculate the force
 	for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
 	{
@@ -37,25 +37,31 @@ void Mass::update(float timeDelta)
 		glm::vec3 toPoint = (*it)->getPosition() - mPosition;
 
 		//fjäderns viloläge i vektorform
-		glm::vec3 springVector = glm::normalize((*it)->getPosition() - mPosition) * springLength;
+		glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
 		//Spring force
 		F = F + (toPoint - springVector) * k;
 
+		//Difference in velocity in the direction of the spring
+		glm::vec3 velocityDifference = glm::length((*it)->getVelocity() - mVelocity)*glm::normalize(toPoint);
+
 		//Damping
-		F = F + ((*it)->getVelocity() - mVelocity) * d;
+		F = F + (velocityDifference) * d;
 	}
 
 	//EULER 
 	//TODO: Should be moved to a separate function and generalized 
 	glm::vec3 a = F / mMass;
 	mVelocity = mVelocity + a * timeDelta;
+	//std::cout << mVelocity << "\n";
 	mPosition = mPosition + mVelocity * timeDelta;
 }
 
 void Mass::connectMass(Mass* m)
 {
+	//TODO: Check if already connected?
 	mConnectedMasses.push_back(m);
+	m->mConnectedMasses.push_back(this);
 }
 
 void Mass::draw()

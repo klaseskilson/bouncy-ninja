@@ -45,6 +45,8 @@ public:
 	//Initializes each vertex with a box for debug purposes
 	void createDebugBox(float xsize, float ysize, float zsize);
 
+	std::vector<Mass*> mConnectedMasses;
+
 private:
   static GLShader* basicShader;
 
@@ -53,7 +55,6 @@ private:
   glm::vec3 mPosition;
   glm::mat4 mTransform;
   float mMass = 1;
-  std::vector<Mass*> mConnectedMasses;
 
   //GL variables
   GLuint vao;
