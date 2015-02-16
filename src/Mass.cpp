@@ -9,8 +9,10 @@ Mass::Mass()
   createDebugBox(0.5f, 0.5f, 0.5f);
 }
 
-Mass::Mass(glm::vec3 pos)
+Mass::Mass(glm::vec3 pos, float spring, float dampening)
 {
+  mDampeningConstant = dampening;
+  mSpringConstant = spring;
   mPosition = pos;
   mInitialPosition = pos;
   createDebugBox(0.5f, 0.5f, 0.5f);
@@ -26,8 +28,8 @@ Mass::~Mass()
 void Mass::update(float timeDelta)
 {
   glm::vec3 F = glm::vec3(0.0f);
-  float k = 10.0f;
-  float b = 0.4f;
+  float k = mSpringConstant;
+  float b = mDampeningConstant;
 
   // For each connected mass, calculate the force
   for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
