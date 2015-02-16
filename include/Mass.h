@@ -32,6 +32,11 @@ public:
 
     //Set shader, ONLY USED WHEN IN DEBUG MODE.
     static void setShader(GLShader* shader);
+    
+    //toggle if gravity is active
+    static void setGravity(bool b);
+    void setStatic(bool b);
+
     static GLShader* getShader();
 
     //Returns vertex position
@@ -53,6 +58,9 @@ public:
 
 private:
     static GLShader* basicShader;
+    static bool gravityActive;
+
+    bool mIsStatic = false;
 
     glm::vec3 mVelocity;
 

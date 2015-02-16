@@ -1,5 +1,6 @@
 #include "Mass.h"
 GLShader*  Mass::basicShader;
+bool Mass::gravityActive;
 
 Mass::Mass()
 {
@@ -27,34 +28,43 @@ Mass::~Mass()
 
 void Mass::update(float timeDelta)
 {
-    glm::vec3 F = glm::vec3(0.0f);
-    float k = mSpringConstant;
-    float b = mDampeningConstant;
+    if (!mIsStatic)
+        { 
+        glm::vec3 F = glm::vec3(0.0f);
 
-    // For each connected mass, calculate the force
-    for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
-    {
-        // vector from this point to the (*it) point
-        glm::vec3 toPoint = mPosition - (*it)->getPosition();
+        if (gravityActive)
+        {
+            F = F + glm::vec3(0.0f, -9.81f, 0.0f) * mMass;
+        }
+    
+        float k = mSpringConstant;
+        float b = mDampeningConstant;
 
-        // get the length of the spring in rest
-        float springLength = glm::length((*it)->getInitialPosition() - mInitialPosition);
+        // For each connected mass, calculate the force
+        for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
+        {
+            // vector from this point to the (*it) point
+            glm::vec3 toPoint = mPosition - (*it)->getPosition();
 
-        // the spring's initial position as a vector
-        glm::vec3 springVector = glm::normalize(toPoint) * springLength;
+            // get the length of the spring in rest
+            float springLength = glm::length((*it)->getInitialPosition() - mInitialPosition);
 
-        //Spring force
-        F -= (toPoint - springVector) * k;
+            // the spring's initial position as a vector
+            glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
-        //Difference in velocity
-        glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);
+            //Spring force
+            F -= (toPoint - springVector) * k;
 
-        //Damping
-        F = F + (velocityDifference) * b;
+            //Difference in velocity
+            glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);
+
+            //Damping
+            F = F + (velocityDifference) * b;
+        }
+
+        //EULER
+        implicitEuler(F, timeDelta);
     }
-
-    //EULER
-    implicitEuler(F, timeDelta);
 }
 
 void Mass::explicitEuler(glm::vec3 force, float h)
@@ -73,7 +83,7 @@ void Mass::implicitEuler(glm::vec3 force, float h)
     glm::vec3 nextForce = force + H * (mVelocity + deltaVelocity) * h;
     glm::vec3 a = nextForce / mMass;
     mVelocity = mVelocity + a * h;
-    std::cout << mVelocity << "\n";
+    //std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
 }
 
@@ -82,6 +92,11 @@ void Mass::connectMass(Mass* m)
     //TODO: Check if already connected?
     mConnectedMasses.push_back(m);
     m->mConnectedMasses.push_back(this);
+}
+
+void Mass::setStatic(bool b)
+{
+    mIsStatic = b;
 }
 
 void Mass::draw()
@@ -132,6 +147,10 @@ void Mass::setVelocity(glm::vec3 v)
     mVelocity = v;
 }
 
+void Mass::setGravity(bool b)
+{
+    gravityActive = b;
+}
 
 void Mass::createDebugBox(float xsize, float ysize, float zsize)
 {

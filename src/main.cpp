@@ -68,6 +68,7 @@ int main()
 
   GLShader* shader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
   Mass::setShader(shader);
+  Mass::setGravity(true);
 
   updateCamera();
 
