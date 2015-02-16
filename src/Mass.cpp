@@ -61,7 +61,7 @@ void Mass::update(float timeDelta)
         }
 
         //EULER
-        implicitEuler(F, timeDelta);
+        rungeKutta(F, timeDelta);
     }
 }
 
@@ -83,6 +83,14 @@ void Mass::implicitEuler(glm::vec3 force, float h)
     mVelocity = mVelocity + a * h;
     //std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
+}
+
+void Mass::rungeKutta(glm::vec3 force, float h)
+{
+    glm::vec3 a = force / mMass;
+    mVelocity = mVelocity + h * a + ((h * h) / 2) * a;
+    ///std::cout << mVelocity << "\n";
+    mPosition = mPosition + h * mVelocity + ((h * h) / 2) * mVelocity; 
 }
 
 void Mass::connectMass(Mass* m)
