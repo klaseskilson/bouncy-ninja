@@ -22,21 +22,19 @@ Mass::Mass(glm::vec3 pos, float spring, float dampening)
 
 Mass::~Mass()
 {
-    std::cout << "Destroying Mass at " << mPosition << std::endl;
 }
-
 
 void Mass::update(float timeDelta)
 {
     if (!mIsStatic)
-        { 
+    {
         glm::vec3 F = glm::vec3(0.0f);
 
         if (gravityActive)
         {
             F = F + glm::vec3(0.0f, -9.81f, 0.0f) * mMass;
         }
-    
+
         float k = mSpringConstant;
         float b = mDampeningConstant;
 
@@ -247,5 +245,4 @@ void Mass::createDebugBox(float xsize, float ysize, float zsize)
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 }
