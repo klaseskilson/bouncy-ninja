@@ -75,7 +75,6 @@ int main()
 
   Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
 
-
   float timeDelta = glfwGetTime();
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
