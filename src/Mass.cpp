@@ -53,7 +53,7 @@ void Mass::update(float timeDelta)
   }
 
     //EULER
-    explicitEuler(F, timeDelta);
+    implicitEuler(F, timeDelta);
 }
 
 void Mass::explicitEuler(glm::vec3 force, float h)
@@ -66,10 +66,13 @@ void Mass::explicitEuler(glm::vec3 force, float h)
 
 void Mass::implicitEuler(glm::vec3 force, float h)
 {
-    glm::vec3 a = force / mMass;
-    glm::vec3 aNext = a + a * h;
-    mVelocity = mVelocity + aNext * h;
-    //std::cout << mVelocity << "\n";
+    glm::vec3 H = force + force * h;
+    glm::vec3 nextVelocity = mVelocity + mVelocity * h;
+    glm::vec3 deltaVelocity = nextVelocity - mVelocity;
+    glm::vec3 nextForce = force + H * (mVelocity + deltaVelocity) * h;
+    glm::vec3 a = nextForce / mMass;
+    mVelocity = mVelocity + a * h;
+    std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
 }
 
