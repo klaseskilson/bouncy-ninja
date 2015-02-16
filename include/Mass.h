@@ -14,38 +14,39 @@
 
 class Mass{
 public:
-	//Constructors
-	Mass();
-	Mass(glm::vec3 pos);
+  //Constructors
+  Mass();
+  Mass(glm::vec3 pos);
 
-	//Destructor
-	~Mass();
+  //Destructor
+  ~Mass();
 
-	//Update the simulation
-	void update(float timeDelta);
+  //Update the simulation
+  void update(float timeDelta);
 
-	//Render debug cubes for debug mode
-	void draw();
+  //Render debug cubes for debug mode
+  void draw();
 
-	//Connect with another mass
-	void connectMass(Mass* m);
+  //Connect with another mass
+  void connectMass(Mass* m);
 
-	//Set shader, ONLY USED WHEN IN DEBUG MODE.
-	static void setShader(GLShader* shader);
-	static GLShader* getShader();
+  //Set shader, ONLY USED WHEN IN DEBUG MODE.
+  static void setShader(GLShader* shader);
+  static GLShader* getShader();
 
-	//Returns vertex position
-	glm::vec3 getPosition();
+  //Returns vertex position
+  glm::vec3 getPosition();
+  glm::vec3 getInitialPosition();
 
-	glm::vec3 getVelocity();
-	//Set velocity
-	void setVelocity(glm::vec3 v);
+  glm::vec3 getVelocity();
+  //Set velocity
+  void setVelocity(glm::vec3 v);
 
 
-	//Initializes each vertex with a box for debug purposes
-	void createDebugBox(float xsize, float ysize, float zsize);
+  //Initializes each vertex with a box for debug purposes
+  void createDebugBox(float xsize, float ysize, float zsize);
 
-	std::vector<Mass*> mConnectedMasses;
+  std::vector<Mass*> mConnectedMasses;
 
 private:
   static GLShader* basicShader;
@@ -53,6 +54,7 @@ private:
   glm::vec3 mVelocity;
 
   glm::vec3 mPosition;
+  glm::vec3 mInitialPosition;
   glm::mat4 mTransform;
   float mMass = 1;
 
