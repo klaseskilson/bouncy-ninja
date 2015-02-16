@@ -16,6 +16,8 @@
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void updateCamera();
 
+bool gRunSimulation = true;
+
 int main()
 {
     printf("Initiating...\n");
@@ -86,7 +88,10 @@ int main()
         // wipe the drawing surface clear
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        theBody.update(glfwGetTime() - timeDelta);
+        if (gRunSimulation)
+        {
+            theBody.update(glfwGetTime() - timeDelta);
+        }
         timeDelta = glfwGetTime();
 
         floor->draw();
@@ -110,8 +115,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
     if (key == GLFW_KEY_D && action == GLFW_PRESS)
     {
-        std::cout << "Toggling debug!" << std::endl;
+        std::cout << "Toggling debug! Press D to toggle again." << std::endl;
         Body::toggleDebug();
+    }
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+    {
+        gRunSimulation = !gRunSimulation;
     }
 }
 
@@ -122,7 +131,7 @@ void updateCamera()
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     // Camera matrix
     glm::mat4 View = glm::lookAt(
-        glm::vec3(10, 10, 10), // Camera is at (4,3,3), in World Space
+        glm::vec3(10, 10, 10), // Camera is at (10,10,10), in World Space
         glm::vec3(0, 0, 0), // and looks at the origin
         glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
