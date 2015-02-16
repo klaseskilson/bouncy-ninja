@@ -70,7 +70,7 @@ private:
     glm::mat4 mTransform;
 
     float mMass = 1.0f;
-    float mSpringConstant, mDampeningConstant;
+    float mSpringConstant, mDampingConstant;
 
     //GL variables
     GLuint vao;

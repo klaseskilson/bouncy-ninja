@@ -13,5 +13,5 @@ void main()
 
   float lightning = diffuse + ambient;
 
-  frag_colour = vec4(1.0, 1.0, 1.0, 1.0) * lightning;
+  frag_colour = vec4(1.0, 0.0, 0.5, 1.0) * lightning;
 }
