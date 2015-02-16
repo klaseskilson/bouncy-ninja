@@ -8,11 +8,11 @@ m = 2; % mass
 h = 0.01; % step
 g = 9.81; % gravitation
 k = 20; % feather constant
-b = 0.4; % damping constant
+b = 0.8; % damping constant
 l = 10; % distance from equlibrium point
 
 % Number of samples
-N = 3000;
+N = 300;
 
 % Number of masses
 Mx = 8;
@@ -121,7 +121,7 @@ for n=2:N
     for i = 1:Mtot
         % Euler explicit
         v(n,i,1) = v(n-1,i,1) + (Fk(i,1)+Fb(i,1))*h/m;
-        v(n,i,2) = v(n-1,i,2) + (Fk(i,2)+Fb(i,2)-m*g)*h/m;
+        v(n,i,2) = v(n-1,i,2) + (Fk(i,2)+Fb(i,2)-(m*g))*h/m;
         x(n,i,1) = x(n-1,i,1) + v(n,i,1)*h;
         x(n,i,2) = x(n-1,i,2) + v(n,i,2)*h;
     end
