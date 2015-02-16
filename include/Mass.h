@@ -46,6 +46,9 @@ public:
   //Initializes each vertex with a box for debug purposes
   void createDebugBox(float xsize, float ysize, float zsize);
 
+  void explicitEuler(glm::vec3 force, float h);
+  void implicitEuler(glm::vec3 force, float h);
+
   std::vector<Mass*> mConnectedMasses;
 
 private:

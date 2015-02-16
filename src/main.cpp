@@ -26,8 +26,9 @@ int main()
     return -1;
   }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  // force opengl version
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   #ifdef __APPLE__
@@ -75,7 +76,7 @@ int main()
   Boundary floor = Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f));
 
 
-  float timeDelta = 0.0f;
+  float timeDelta = glfwGetTime();
   printf("\nLet's get ready to render!\n\n");
   while (!glfwWindowShouldClose(window)) {
 
