@@ -52,8 +52,8 @@ void Mass::update(float timeDelta)
             // the spring's initial position as a vector
             glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
-            //Spring force
-            F -= (toPoint - springVector) * k;
+            //Spring force, Hook's
+            F = F - (toPoint - springVector) * k;
 
             //Difference in velocity
             glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);

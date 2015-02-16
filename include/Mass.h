@@ -16,7 +16,7 @@ class Mass{
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 10.0f, float dampening = 0.4f);
+    Mass(glm::vec3 pos, float spring = 2.0f, float dampening = 0.4f);
 
     //Destructor
     ~Mass();
