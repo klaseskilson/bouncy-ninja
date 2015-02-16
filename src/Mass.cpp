@@ -27,7 +27,7 @@ void Mass::update(float timeDelta)
 {
   glm::vec3 F = glm::vec3(0.0f,0.0f,0.0f);
   float k = 10.0f;
-  float b = -0.9f;
+  float b = 0.4f;
 
 
   // float springLength = 2.0f;
@@ -45,19 +45,32 @@ void Mass::update(float timeDelta)
     //Spring force
     F -= (toPoint - springVector) * k;
 
-    //Difference in velocity in the direction of the spring
-	glm::vec3 velocityDifference = (mVelocity - (*it)->getVelocity());
+    //Difference in velocity
+	glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);
 
     //Damping
     F = F + (velocityDifference) * b;
   }
 
-  //EULER
-  //TODO: Should be moved to a separate function and generalized
-  glm::vec3 a = F / mMass;
-  mVelocity = mVelocity + a * timeDelta;
-  //std::cout << mVelocity << "\n";
-  mPosition = mPosition + mVelocity * timeDelta;
+    //EULER
+    explicitEuler(F, timeDelta);
+}
+
+void Mass::explicitEuler(glm::vec3 force, float h)
+{
+	glm::vec3 a = force / mMass;
+  	mVelocity = mVelocity + a * h;
+  	//std::cout << mVelocity << "\n";
+  	mPosition = mPosition + mVelocity * h;
+}
+
+void Mass::implicitEuler(glm::vec3 force, float h)
+{
+    glm::vec3 a = force / mMass;
+    glm::vec3 aNext = a + a * h;
+    mVelocity = mVelocity + aNext * h;
+    //std::cout << mVelocity << "\n";
+    mPosition = mPosition + mVelocity * h;
 }
 
 void Mass::connectMass(Mass* m)
