@@ -59,7 +59,7 @@ void Mass::update(float timeDelta)
 void Mass::explicitEuler(glm::vec3 force, float h)
 {
 	glm::vec3 a = force / mMass;
-  	mVelocity = mVelocity + a * h;
+	mVelocity = mVelocity + a * h;
   	//std::cout << mVelocity << "\n";
   	mPosition = mPosition + mVelocity * h;
 }

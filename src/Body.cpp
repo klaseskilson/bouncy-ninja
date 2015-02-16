@@ -12,7 +12,7 @@ Body::Body()
 	Mass* tmpMass7 = new Mass(glm::vec3(1.0f, -1.0f, -1.0f));
 	Mass* tmpMass8 = new Mass(glm::vec3(-1.5f, -1.0f, -1.0f));
 
-    tmpMass4->setVelocity(glm::vec3(-5.0f));
+    tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
 
 	tmpMass->connectMass(tmpMass2);
 	tmpMass->connectMass(tmpMass3);
