@@ -27,7 +27,7 @@ void Mass::update(float timeDelta)
 {
   glm::vec3 F = glm::vec3(0.0f,0.0f,0.0f);
   float k = 10.0f;
-  float d = 0.4f;
+  float b = -0.9f;
 
 
   // float springLength = 2.0f;
@@ -35,7 +35,7 @@ void Mass::update(float timeDelta)
   for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
   {
     //vektor i riktning p2 -> p1
-    glm::vec3 toPoint = (*it)->getPosition() - mPosition;
+	  glm::vec3 toPoint = mPosition - (*it)->getPosition();
 
     float springLength = glm::length(((*it)->getInitialPosition() - mInitialPosition));
 
@@ -43,13 +43,13 @@ void Mass::update(float timeDelta)
     glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
     //Spring force
-    F = F + (toPoint - springVector) * k;
+    F -= (toPoint - springVector) * k;
 
     //Difference in velocity in the direction of the spring
-    glm::vec3 velocityDifference = glm::length((*it)->getVelocity() - mVelocity)*glm::normalize(toPoint);
+	glm::vec3 velocityDifference = (mVelocity - (*it)->getVelocity());
 
     //Damping
-    F = F + (velocityDifference) * d;
+    F = F + (velocityDifference) * b;
   }
 
   //EULER
