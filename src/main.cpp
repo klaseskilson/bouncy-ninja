@@ -66,8 +66,8 @@ int main()
   glDepthFunc(GL_LESS); // depth-testing interprets a smaller value as "closer"
 
 
-  GLShader* shader = new GLShader("../shaders/main.vert", "../shaders/main.frag");
-  Mass::setShader(shader);
+  GLShader* simpleShader = new GLShader("../shaders/simple.vert", "../shaders/simple.frag");
+  Mass::setShader(simpleShader);
   Mass::setGravity(true);
 
   updateCamera();
