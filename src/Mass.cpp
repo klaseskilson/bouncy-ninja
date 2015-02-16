@@ -43,8 +43,8 @@ void Mass::update(float timeDelta)
         // the spring's initial position as a vector
         glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
-        //Spring force
-        F -= (toPoint - springVector) * k;
+        //Spring force, Hook's
+        F = F - (toPoint - springVector) * k;
 
         //Difference in velocity
         glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);
@@ -73,7 +73,7 @@ void Mass::implicitEuler(glm::vec3 force, float h)
     glm::vec3 nextForce = force + H * (mVelocity + deltaVelocity) * h;
     glm::vec3 a = nextForce / mMass;
     mVelocity = mVelocity + a * h;
-    std::cout << mVelocity << "\n";
+    //std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
 }
 
