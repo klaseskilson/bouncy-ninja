@@ -4,6 +4,7 @@
 
 #include <GL/glew.h> // include GLEW and new version of GL on Windows
 #include <glm/glm.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <stdio.h>
 #include <sstream>
@@ -15,9 +16,12 @@
 #include "Mass.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void updateCamera();
 
 bool gRunSimulation = true;
+float mouseXPos;
+float mouseYPos;
 
 int main()
 {
@@ -57,6 +61,10 @@ int main()
 
     // setup key events
     glfwSetKeyCallback(window, key_callback);
+    //setup mouse event function
+    glfwSetCursorPosCallback(window, cursor_position_callback);
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 
     // get version info
     const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
@@ -108,6 +116,8 @@ int main()
             timeDelta = glfwGetTime();
         }
 
+        updateCamera();
+
         //DRAWING CALLS
         floor->draw();
         theBody.draw();
@@ -151,14 +161,26 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }
 }
 
+static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    mouseXPos = xpos;
+    mouseYPos = ypos;
+}
+
 void updateCamera()
 {
     // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
     glUseProgram(Mass::getShader()->programID);
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     // Camera matrix
+    glm::mat4 rotationMat = glm::eulerAngleYZ(mouseXPos*0.01f, mouseYPos*0.01f);
+    glm::vec4 cameraPosition = glm::vec4(10.0f, 0.0f, 0.0f,1.0f) * rotationMat;
+    glm::vec3 cameraPos = glm::vec3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
+    //glm::vec3 cameraPos = glm::vec3(0.0f, 7.0f, 10.0f);
+
+
     glm::mat4 View = glm::lookAt(
-        glm::vec3(0, 7, 10), // Camera is at (10,10,10), in World Space
+        cameraPos, // Camera is at (10,10,10), in World Space
         glm::vec3(0, 0, 0), // and looks at the origin
         glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
