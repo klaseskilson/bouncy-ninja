@@ -39,7 +39,7 @@ void Mass::update(float timeDelta)
         float b = mDampeningConstant;
 
         // For each connected mass, calculate the force
-        for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
+        for (std::vector<std::shared_ptr<Mass>>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
         {
             // vector from this point to the (*it) point
             glm::vec3 toPoint = mPosition - (*it)->getPosition();
@@ -93,11 +93,11 @@ void Mass::rungeKutta(glm::vec3 force, float h)
     mPosition = mPosition + h * mVelocity + ((h * h) / 2) * mVelocity; 
 }
 
-void Mass::connectMass(Mass* m)
+void Mass::connectMass(std::shared_ptr<Mass> m)
 {
     //TODO: Check if already connected?
     mConnectedMasses.push_back(m);
-    m->mConnectedMasses.push_back(this);
+    m->mConnectedMasses.push_back(std::shared_ptr<Mass>(this));
 }
 
 void Mass::setStatic(bool b)

@@ -5,8 +5,9 @@ GLShader*  Body::basicShader;
 
 Body::Body()
 {
-    loadObj("../assets/suzanne.obj");
+    loadObj("../assets/cube.obj");
 
+    /*
     Mass* tmpMass = new Mass(glm::vec3(-1.0f,1.0f,1.0f));
     Mass* tmpMass2 = new Mass(glm::vec3(1.0f,1.0f,1.0f));
     Mass* tmpMass3 = new Mass(glm::vec3(1.0f, 1.0f, -1.0f));
@@ -63,6 +64,7 @@ Body::Body()
     mMasses.push_back(std::shared_ptr<Mass>(tmpMass6));
     mMasses.push_back(std::shared_ptr<Mass>(tmpMass7));
     mMasses.push_back(std::shared_ptr<Mass>(tmpMass8));
+    */
 }
 
 Body::~Body()
@@ -134,6 +136,7 @@ void Body::loadObj(const char * path)
     
     for (int i = 0; i < vertices.size(); i++)
     {
+        mMasses.push_back(std::shared_ptr<Mass>(new Mass(vertices.at(i))));
         vertexarray.push_back(vertices.at(i).x);
         vertexarray.push_back(vertices.at(i).y);
         vertexarray.push_back(vertices.at(i).z);
@@ -143,6 +146,23 @@ void Body::loadObj(const char * path)
         vertexarray.push_back(uvs.at(i).x);
         vertexarray.push_back(uvs.at(i).y);
     }
+
+    //Connect masses with other masses using the index list
+    for (int i = 0; i < indices.size()/3; i++)
+    {
+        std::cout << "Connecting mass: " << indices.at(3 * i) << " with " << indices.at(3 * i + 1) << "and " << indices.at(3 * i + 2) << "\n";
+        //indices.at(3*i) ska connecta med indices.at(3*i+1)
+        mMasses.at(indices.at(3 * i))->connectMass(mMasses.at(indices.at(3 * i + 1)));
+        
+        //indices.at(3*i+1) ska connecta med indices.at(3*i+2)
+        mMasses.at(indices.at(3 * i + 1))->connectMass(mMasses.at(indices.at(3 * i + 2)));
+
+        //indices.at(3*i+2) ska connecta med indices.at(3*i)
+        mMasses.at(indices.at(3 * i + 2))->connectMass(mMasses.at(indices.at(3 * i)));
+
+    }
+    mMasses.at(0)->setStatic(true);
+
 
     numberOfTriangles = indices.size() / 3;
     numberOfVertices = vertices.size();
