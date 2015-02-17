@@ -7,12 +7,12 @@ GLShader* Body::basicShader;
 
 Body::Body()
 {
-    //loadObj("../assets/cube.obj");
+    //loadObj("../assets/suzanne.obj");
 
     //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
     //tmpMass->setStatic(true);
 
-    createCube(3, 0.5, glm::vec3(1.0,1.0, 1.0));
+    createCube(5, 0.8, glm::vec3(1.0,1.0,1.0));
 
     mMasses.at(0)->setStatic(true);
     mMasses.at(2)->setStatic(true);
@@ -91,16 +91,15 @@ GLShader* Body::getShader()
     return basicShader;
 }
 
-void Body::createCube(int nMasses, float massDistance, glm::vec3 startingPoint)
+void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
 {
-    std::cout << startingPoint.x;
     for(int x = 0; x < nMasses; x++)
     {
         for(int y = 0; y < nMasses; y++)
         {
             for(int z = 0; z < nMasses; z++)
             {
-                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((startingPoint.x-x*massDistance), (startingPoint.y-y*massDistance), (startingPoint.z-z*massDistance)))));
+                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((sPoint.x-x*massDistance), (sPoint.y-y*massDistance), (sPoint.z-z*massDistance)))));
             }
         }
     }

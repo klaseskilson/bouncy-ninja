@@ -7,7 +7,7 @@ Mass::Mass()
     mPosition = glm::vec3(0.0f, 0.0f, 0.0f);
     mInitialPosition = glm::vec3(0.0f, 0.0f, 0.0f);
 
-    createDebugBox(0.5f, 0.5f, 0.5f);
+    createDebugBox(0.2f, 0.2f, 0.2f);
 }
 
 Mass::Mass(glm::vec3 pos, float spring, float damping)
@@ -16,7 +16,7 @@ Mass::Mass(glm::vec3 pos, float spring, float damping)
     mSpringConstant = spring;
     mPosition = pos;
     mInitialPosition = pos;
-    createDebugBox(0.5f, 0.5f, 0.5f);
+    createDebugBox(0.2f, 0.2f, 0.2f);
     mVelocity = glm::vec3(0.0f);
 }
 
@@ -96,10 +96,21 @@ void Mass::implicitEuler(glm::vec3 force, float h)
 
 void Mass::rungeKutta(glm::vec3 force, float h)
 {
+    float two = 2.0;
+
     glm::vec3 a = force / mMass;
-    mVelocity = mVelocity + h * a + ((h * h) / 2) * a;
-    ///std::cout << mVelocity << "\n";
-    mPosition = mPosition + h * mVelocity + ((h * h) / 2) * mVelocity;
+
+    glm::vec3 kv1 = a * h;
+    glm::vec3 kv2 = a + (h / 2) * kv1;
+    glm::vec3 kv3 = a + (h / 2) * kv2;
+    glm::vec3 kv4 = a + h * kv3;
+    mVelocity = mVelocity + ((h / 6) * (kv1 + (two * kv2) + (two * kv3) + kv4));
+
+    glm::vec3 kx1 = mVelocity * h;
+    glm::vec3 kx2 = mVelocity + (h / 2) * kx1;
+    glm::vec3 kx3 = mVelocity + (h / 2) * kx2;
+    glm::vec3 kx4 = mVelocity + h * kx3;
+    mPosition = mPosition + ((h / 6) * (kx1 + (two * kx2) + (two * kx3) + kx4));
 }
 
 void Mass::connectMass(std::shared_ptr<Mass> m)
