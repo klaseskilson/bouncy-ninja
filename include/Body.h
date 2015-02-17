@@ -21,8 +21,8 @@ public:
     void update(float timeDelta);
     void move();
 
-    static void addBoundary(std::shared_ptr<Boundary>);
-    static std::vector<std::shared_ptr<Boundary>> getBoundaries();
+    void addBoundary(std::shared_ptr<Boundary>);
+    std::vector<std::shared_ptr<Boundary>> getBoundaries();
 
     void loadObj(const char * path);
 
@@ -34,7 +34,7 @@ public:
 private:
     static bool mDebug;
     std::vector<std::shared_ptr<Mass>> mMasses;
-    static std::vector<std::shared_ptr<Boundary>> mBoundaries;
+    std::vector<std::shared_ptr<Boundary>> mBoundaries;
 
     //GL variables
     static GLShader* basicShader;

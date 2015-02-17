@@ -78,7 +78,7 @@ int main()
 
     // create our floor and set it up
     std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-10.0f, -10.0f, -10.0f), glm::vec3(10.0f, -9.9f, 10.0f)));
-    Body::addBoundary(floor);
+    theBody.addBoundary(floor);
     floor->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
@@ -99,7 +99,7 @@ int main()
             }
         }
 
-        //floor->draw();
+        floor->draw();
         theBody.draw();
 
         // update other events like input handling

@@ -39,6 +39,8 @@ public:
     float getTop();
     float getBottom();
 
+    void getProperPosition(glm::vec3 &pos);
+
 private:
     // our corners
     glm::vec3 mA, mB;

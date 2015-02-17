@@ -25,7 +25,7 @@ Mass::~Mass()
     //mConnectedMasses.clear();
 }
 
-void Mass::update(float timeDelta)
+void Mass::update(float timeDelta, std::vector<std::shared_ptr<Boundary>> boundaries)
 {
     if (!mIsStatic)
     {
@@ -65,10 +65,10 @@ void Mass::update(float timeDelta)
         rungeKutta(F, timeDelta);
 
         // collision detection!
-        // for (std::vector<std::shared_ptr<Boundary>>::iterator it = getBoundaries().begin(); it != getBoundaries().end(); ++it)
-        // {
-
-        // }
+        for (std::vector<std::shared_ptr<Boundary>>::iterator it = boundaries.begin(); it != boundaries.end(); ++it)
+        {
+            (*it)->getProperPosition(mPosition);
+        }
     }
 }
 

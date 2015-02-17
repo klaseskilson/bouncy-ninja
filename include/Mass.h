@@ -13,8 +13,7 @@
 // #include "Body.h"
 #include "bouncy_helpers.h"
 #include "GLShader.h"
-
-class Body;
+#include "Boundary.h"
 
 class Mass
 {
@@ -27,7 +26,7 @@ public:
     ~Mass();
 
     //Update the simulation
-    void update(float timeDelta);
+    void update(float timeDelta, std::vector<std::shared_ptr<Boundary>> boundaries);
 
     //Render debug cubes for debug mode
     void draw();

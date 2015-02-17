@@ -127,6 +127,11 @@ float Boundary::getBottom()
     return fmin(mA.y, mB.y);
 }
 
+void Boundary::getProperPosition(glm::vec3 &pos)
+{
+    pos.y = fmax(getTop(), pos.y);
+}
+
 void Boundary::draw()
 {
     glUseProgram(mShader->programID);
