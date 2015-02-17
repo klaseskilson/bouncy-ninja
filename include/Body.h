@@ -8,6 +8,8 @@
 
 #include "Mass.h"
 #include "Boundary.h"
+#include "vboindexer.hpp"
+#include "objloader.hpp"
 
 class Body
 {
@@ -19,12 +21,41 @@ public:
     void update(float timeDelta);
     void move();
     void addBoundary(std::shared_ptr<Boundary>);
-    static void toggleDebug() {mDebug = !mDebug;}
 
+    void loadObj(const char * path);
+
+    static void setShader(GLShader* shader);
+    static GLShader* getShader();
+
+    static void toggleDebug() {mDebug = !mDebug;}
+    
 private:
+    
     static bool mDebug;
     std::vector<std::shared_ptr<Mass>> mMasses;
     std::vector<std::shared_ptr<Boundary>> mBoundaries;
+
+    //GL variables
+    static GLShader* basicShader;
+    
+    std::vector<unsigned short> indices;
+    std::vector<GLfloat> vertexarray;
+
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> uvs;
+    std::vector<glm::vec3> normals;
+
+    GLuint vao;
+    int numberOfVertices;
+    int numberOfTriangles;
+
+    GLuint vertexbuffer;
+    GLuint normalbuffer;
+    GLuint uvbuffer;
+    GLuint indexbuffer;
+
+    //GLfloat *vertexarray;
+    GLuint *indexarray;
 };
 
 #endif // BODY_H_
