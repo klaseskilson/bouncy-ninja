@@ -21,6 +21,7 @@ public:
     void update(float timeDelta);
     void move();
     void addBoundary(std::shared_ptr<Boundary>);
+    std::vector<std::shared_ptr<Boundary>> getBoundaries();
 
     void loadObj(const char * path);
 
@@ -28,16 +29,16 @@ public:
     static GLShader* getShader();
 
     static void toggleDebug() {mDebug = !mDebug;}
-    
+
 private:
-    
+
     static bool mDebug;
     std::vector<std::shared_ptr<Mass>> mMasses;
     std::vector<std::shared_ptr<Boundary>> mBoundaries;
 
     //GL variables
     static GLShader* basicShader;
-    
+
     std::vector<unsigned short> indices;
     std::vector<GLfloat> vertexarray;
 

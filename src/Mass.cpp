@@ -62,6 +62,12 @@ void Mass::update(float timeDelta)
 
         //EULER
         rungeKutta(F, timeDelta);
+
+        // collision detection!
+        // for (std::vector<std::shared_ptr<Boundary>>::iterator it = getBoundaries().begin(); it != getBoundaries().end(); ++it)
+        // {
+
+        // }
     }
 }
 
@@ -90,7 +96,7 @@ void Mass::rungeKutta(glm::vec3 force, float h)
     glm::vec3 a = force / mMass;
     mVelocity = mVelocity + h * a + ((h * h) / 2) * a;
     ///std::cout << mVelocity << "\n";
-    mPosition = mPosition + h * mVelocity + ((h * h) / 2) * mVelocity; 
+    mPosition = mPosition + h * mVelocity + ((h * h) / 2) * mVelocity;
 }
 
 void Mass::connectMass(Mass* m)

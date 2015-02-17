@@ -9,10 +9,11 @@
 #include <glm/gtx/transform.hpp>
 #include <iostream>
 
+// #include "Body.h"
 #include "bouncy_helpers.h"
 #include "GLShader.h"
 
-class Mass{
+class Mass {
 public:
     //Constructors
     Mass();
@@ -32,7 +33,7 @@ public:
 
     //Set shader, ONLY USED WHEN IN DEBUG MODE.
     static void setShader(GLShader* shader);
-    
+
     //toggle if gravity is active
     static void setGravity(bool b);
     void setStatic(bool b);

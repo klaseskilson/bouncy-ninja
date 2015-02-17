@@ -1,12 +1,11 @@
 #include "Body.h"
 #include <iostream>
 bool Body::mDebug = true;
-GLShader*  Body::basicShader;
+GLShader* Body::basicShader;
 
 Body::Body()
 {
-    loadObj("../assets/suzanne.obj");
-    std::cout << vertices.at(1);
+    // loadObj("../assets/suzanne.obj");
 
     Mass* tmpMass = new Mass(glm::vec3(-1.0f,1.0f,1.0f));
     Mass* tmpMass2 = new Mass(glm::vec3(1.0f,1.0f,1.0f));
@@ -112,6 +111,11 @@ void Body::addBoundary(std::shared_ptr<Boundary> b)
     mBoundaries.push_back(b);
 }
 
+std::vector<std::shared_ptr<Boundary>> Body::getBoundaries()
+{
+    return mBoundaries;
+}
+
 void Body::setShader(GLShader* shader)
 {
     basicShader = shader;
@@ -127,12 +131,12 @@ void Body::loadObj(const char * path)
     std::vector<glm::vec3> out_vertices;
     std::vector<glm::vec2> out_uvs;
     std::vector<glm::vec3> out_normals;
-    
+
     loadOBJ(path, out_vertices, out_uvs, out_normals);
 
     indexVBO(out_vertices, out_uvs, out_normals, indices, vertices, uvs, normals);
-    
-    
+
+
     for (int i = 0; i < vertices.size(); i++)
     {
         vertexarray.push_back(vertices.at(i).x);
