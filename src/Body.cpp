@@ -9,73 +9,13 @@ Body::Body()
 {
     //loadObj("../assets/cube.obj");
 
-    // for(int x = 0; x < 3; x++)
-    // {
-    //     for(int y = 0; y < 3; y++)
-    //     {
-    //         for(int z = 0; z < 3; z++)
-    //         {
-    //             mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
-    //         }
-    //     }
-    // }
-
-    std::shared_ptr<Mass> tmpMass = std::shared_ptr<Mass>(new Mass(glm::vec3(-1.0f,1.0f,1.0f)));
-    std::shared_ptr<Mass> tmpMass2 = std::shared_ptr<Mass>(new Mass(glm::vec3(1.0f,1.0f,1.0f)));
-    std::shared_ptr<Mass> tmpMass3 = std::shared_ptr<Mass>(new Mass(glm::vec3(1.0f, 1.0f, -1.0f)));
-    std::shared_ptr<Mass> tmpMass4 = std::shared_ptr<Mass>(new Mass(glm::vec3(-1.5f, 1.0f, -1.0f)));
-    std::shared_ptr<Mass> tmpMass5 = std::shared_ptr<Mass>(new Mass(glm::vec3(-1.0f, -1.0f, 1.0f)));
-    std::shared_ptr<Mass> tmpMass6 = std::shared_ptr<Mass>(new Mass(glm::vec3(1.0f, -1.0f, 1.0f)));
-    std::shared_ptr<Mass> tmpMass7 = std::shared_ptr<Mass>(new Mass(glm::vec3(1.0f, -1.0f, -1.0f)));
-    std::shared_ptr<Mass> tmpMass8 = std::shared_ptr<Mass>(new Mass(glm::vec3(-1.5f, -1.0f, -1.0f)));
-
     //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
+    //tmpMass->setStatic(true);
 
-    // tmpMass->setStatic(true);
+    createCube(3);
 
-    tmpMass->connectMass(tmpMass2);
-    tmpMass->connectMass(tmpMass3);
-    tmpMass->connectMass(tmpMass4);
-    tmpMass->connectMass(tmpMass5);
-    tmpMass->connectMass(tmpMass6);
-    tmpMass->connectMass(tmpMass7);
-    tmpMass->connectMass(tmpMass8);
-
-    tmpMass2->connectMass(tmpMass3);
-    tmpMass2->connectMass(tmpMass4);
-    tmpMass2->connectMass(tmpMass5);
-    tmpMass2->connectMass(tmpMass6);
-    tmpMass2->connectMass(tmpMass7);
-    tmpMass2->connectMass(tmpMass8);
-
-    tmpMass3->connectMass(tmpMass4);
-    tmpMass3->connectMass(tmpMass5);
-    tmpMass3->connectMass(tmpMass6);
-    tmpMass3->connectMass(tmpMass7);
-    tmpMass3->connectMass(tmpMass8);
-
-    tmpMass4->connectMass(tmpMass5);
-    tmpMass4->connectMass(tmpMass6);
-    tmpMass4->connectMass(tmpMass7);
-    tmpMass4->connectMass(tmpMass8);
-
-    tmpMass5->connectMass(tmpMass6);
-    tmpMass5->connectMass(tmpMass7);
-    tmpMass5->connectMass(tmpMass8);
-
-    tmpMass6->connectMass(tmpMass7);
-    tmpMass6->connectMass(tmpMass8);
-
-    tmpMass7->connectMass(tmpMass8);
-
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass2));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass3));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass4));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass5));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass6));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass7));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass8));
+    mMasses.at(0)->setStatic(true);
+    mMasses.at(2)->setStatic(true);
 
     //Rope
     // for (int i = 0; i < 15; i++)
@@ -149,6 +89,35 @@ void Body::setShader(GLShader* shader)
 GLShader* Body::getShader()
 {
     return basicShader;
+}
+
+void Body::createCube(int k)
+{
+    for(int x = 0; x < k; x++)
+    {
+        for(int y = 0; y < k; y++)
+        {
+            for(int z = 0; z < k; z++)
+            {
+                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
+            }
+        }
+    }
+
+    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(k+2)->getPosition());
+
+    for(std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
+    {
+        for(std::vector<std::shared_ptr<Mass>>::iterator it2 = mMasses.begin(); it2 != mMasses.end(); ++it2)
+        {
+            if((glm::length((*it)->getPosition() - (*it2)->getPosition())) <= radius &&
+                (glm::length((*it)->getPosition() - (*it2)->getPosition())) != 0.0)
+            {
+               (*it)->connectMass(*it2);
+            }
+        }
+        //std::cout << *it << " " << *std::next(it,1) << '\n';
+    }
 }
 
 void Body::loadObj(const char * path)

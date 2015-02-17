@@ -20,7 +20,7 @@ class Mass
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 100.0f, float damping = 45.9f);
+    Mass(glm::vec3 pos, float spring = 9.0f, float damping = 0.9f);
 
     //Destructor
     ~Mass();
@@ -59,7 +59,7 @@ public:
     void implicitEuler(glm::vec3 force, float h);
     void rungeKutta(glm::vec3 force, float h);
 
-    std::vector<std::shared_ptr<Mass>> mConnectedMasses;
+    std::vector<Mass*> mConnectedMasses;
 
 private:
     static GLShader* basicShader;
