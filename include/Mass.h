@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <iostream>
+#include <memory>
 
 // #include "Body.h"
 #include "bouncy_helpers.h"
@@ -17,7 +18,7 @@ class Mass {
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 20.0f, float dampening = 0.4f);
+    Mass(glm::vec3 pos, float spring = 20.0f, float damping = 0.4f);
 
     //Destructor
     ~Mass();
@@ -29,7 +30,7 @@ public:
     void draw();
 
     //Connect with another mass
-    void connectMass(Mass* m);
+    void connectMass(std::shared_ptr<Mass> m);
 
     //Set shader, ONLY USED WHEN IN DEBUG MODE.
     static void setShader(GLShader* shader);
@@ -56,7 +57,7 @@ public:
     void implicitEuler(glm::vec3 force, float h);
     void rungeKutta(glm::vec3 force, float h);
 
-    std::vector<Mass*> mConnectedMasses;
+    std::vector<std::shared_ptr<Mass>> mConnectedMasses;
 
 private:
     static GLShader* basicShader;
@@ -71,7 +72,7 @@ private:
     glm::mat4 mTransform;
 
     float mMass = 1.0f;
-    float mSpringConstant, mDampeningConstant;
+    float mSpringConstant, mDampingConstant;
 
     //GL variables
     GLuint vao;
