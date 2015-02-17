@@ -41,7 +41,7 @@ int main()
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     #endif
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Bouncy Ninja", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "Bouncy Ninja", NULL, NULL);
     if (!window)
     {
         fprintf(stderr, "ERROR: could not open window with GLFW3\n");
@@ -82,6 +82,8 @@ int main()
     floor->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
+    float cappedStep = 0.01f;
+
     printf("\nLet's get ready to render!\n\n");
     while (!glfwWindowShouldClose(window))
     {
@@ -90,11 +92,18 @@ int main()
 
         if (gRunSimulation)
         {
-            theBody.update(glfwGetTime() - timeDelta);
+            if ((glfwGetTime() - timeDelta) > cappedStep)
+            {
+                theBody.update(cappedStep);
+            }
+            else
+            {
+                theBody.update(glfwGetTime() - timeDelta);
+            }
+            timeDelta = glfwGetTime();
         }
-        timeDelta = glfwGetTime();
 
-        floor->draw();
+        //floor->draw();
         theBody.draw();
 
         // update other events like input handling

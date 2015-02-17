@@ -22,6 +22,7 @@ Mass::Mass(glm::vec3 pos, float spring, float damping)
 
 Mass::~Mass()
 {
+    //mConnectedMasses.clear();
 }
 
 void Mass::update(float timeDelta)
@@ -90,6 +91,7 @@ void Mass::implicitEuler(glm::vec3 force, float h)
     //std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
 }
+
 
 void Mass::rungeKutta(glm::vec3 force, float h)
 {
