@@ -9,7 +9,7 @@ std::vector<std::shared_ptr<Boundary>> Body::mBoundaries;
 Body::Body()
 {
     //loadObj("../assets/cube.obj");
-
+    /*
     for(int x = 0; x < 3; x++)
     {
         for(int y = 0; y < 3; y++)
@@ -19,19 +19,25 @@ Body::Body()
                 mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
             }
         }
+    }*/
+    
+    //Rope
+    for (int i = 0; i < 15; i++)
+    {
+        mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3(0.1f*(float)i, 6.0f, 0.0f))));
+        if (i > 0)
+        {
+            mMasses.at(i)->connectMass(mMasses.at(i - 1));
+        }
     }
+    mMasses.at(0)->setStatic(true);
 
-    //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
-
-    //tmpMass->setStatic(true);
-
-    mMasses.at(1)->connectMass(mMasses.at(2));
 }
 
 Body::~Body()
 {
-    mMasses.clear();
-    mBoundaries.clear();
+    //mMasses.clear();
+    //mBoundaries.clear();
 }
 
 void Body::draw()
@@ -116,7 +122,7 @@ void Body::loadObj(const char * path)
     //Connect masses with other masses using the index list
     for (int i = 0; i < indices.size()/3; i++)
     {
-        std::cout << "Connecting mass: " << indices.at(3 * i) << " with " << indices.at(3 * i + 1) << "and " << indices.at(3 * i + 2) << "\n";
+        std::cout << "Connecting mass: " << indices.at(3 * i) << ", " << indices.at(3 * i + 1) << ", " << indices.at(3 * i + 2) << ".\n";
         //indices.at(3*i) ska connecta med indices.at(3*i+1)
         mMasses.at(indices.at(3 * i))->connectMass(mMasses.at(indices.at(3 * i + 1)));
 
