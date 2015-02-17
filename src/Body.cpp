@@ -3,21 +3,32 @@ bool Body::mDebug = true;
 
 Body::Body()
 {
-    Mass* tmpMass = new Mass(glm::vec3(-1.0f,1.0f,1.0f));
-    Mass* tmpMass2 = new Mass(glm::vec3(1.0f,1.0f,1.0f));
-    Mass* tmpMass3 = new Mass(glm::vec3(1.0f, 1.0f, -1.0f));
-    Mass* tmpMass4 = new Mass(glm::vec3(-1.5f, 1.0f, -1.0f));
-    Mass* tmpMass5 = new Mass(glm::vec3(-1.0f, -1.0f, 1.0f));
-    Mass* tmpMass6 = new Mass(glm::vec3(1.0f, -1.0f, 1.0f));
-    Mass* tmpMass7 = new Mass(glm::vec3(1.0f, -1.0f, -1.0f));
-    Mass* tmpMass8 = new Mass(glm::vec3(-1.5f, -1.0f, -1.0f));
+    for(int x = 0; x < 3; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            for(int z = 0; z < 3; z++)
+            {
+                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
+            }
+        }
+    }
+
+    // Mass* tmpMass = new Mass(glm::vec3(-1.0f,1.0f,1.0f));
+    // Mass* tmpMass2 = new Mass(glm::vec3(1.0f,1.0f,1.0f));
+    // Mass* tmpMass3 = new Mass(glm::vec3(1.0f, 1.0f, -1.0f));
+    // Mass* tmpMass4 = new Mass(glm::vec3(-1.5f, 1.0f, -1.0f));
+    // Mass* tmpMass5 = new Mass(glm::vec3(-1.0f, -1.0f, 1.0f));
+    // Mass* tmpMass6 = new Mass(glm::vec3(1.0f, -1.0f, 1.0f));
+    // Mass* tmpMass7 = new Mass(glm::vec3(1.0f, -1.0f, -1.0f));
+    // Mass* tmpMass8 = new Mass(glm::vec3(-1.5f, -1.0f, -1.0f));
 
     //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
 
-    tmpMass->setStatic(true);
+    //tmpMass->setStatic(true);
 
-    tmpMass->connectMass(tmpMass2);
-    tmpMass->connectMass(tmpMass3);
+    //mMasses.at(1)->connectMass(mMasses.at(2));
+    /*tmpMass->connectMass(tmpMass3);
     tmpMass->connectMass(tmpMass4);
     tmpMass->connectMass(tmpMass5);
     tmpMass->connectMass(tmpMass6);
@@ -58,7 +69,7 @@ Body::Body()
     mMasses.push_back(std::shared_ptr<Mass>(tmpMass5));
     mMasses.push_back(std::shared_ptr<Mass>(tmpMass6));
     mMasses.push_back(std::shared_ptr<Mass>(tmpMass7));
-    mMasses.push_back(std::shared_ptr<Mass>(tmpMass8));
+    mMasses.push_back(std::shared_ptr<Mass>(tmpMass8));*/
 }
 
 Body::~Body()
