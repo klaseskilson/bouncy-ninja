@@ -82,7 +82,7 @@ int main()
     floor->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
-    float stepSize = 0.005f;
+    float cappedStep = 0.01f;
 
     printf("\nLet's get ready to render!\n\n");
     while (!glfwWindowShouldClose(window))
@@ -92,11 +92,15 @@ int main()
 
         if (gRunSimulation)
         {
-            if ((glfwGetTime() - timeDelta) > stepSize)
+            if ((glfwGetTime() - timeDelta) > cappedStep)
             {
-                theBody.update(stepSize);
-                timeDelta = glfwGetTime();
+                theBody.update(cappedStep);
             }
+            else
+            {
+                theBody.update(glfwGetTime() - timeDelta);
+            }
+            timeDelta = glfwGetTime();
         }
 
         //floor->draw();
