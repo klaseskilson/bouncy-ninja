@@ -10,9 +10,9 @@ Mass::Mass()
     createDebugBox(0.5f, 0.5f, 0.5f);
 }
 
-Mass::Mass(glm::vec3 pos, float spring, float dampening)
+Mass::Mass(glm::vec3 pos, float spring, float damping)
 {
-    mDampeningConstant = dampening;
+    mDampingConstant = damping;
     mSpringConstant = spring;
     mPosition = pos;
     mInitialPosition = pos;
@@ -36,7 +36,7 @@ void Mass::update(float timeDelta)
         }
 
         float k = mSpringConstant;
-        float b = mDampeningConstant;
+        float b = mDampingConstant;
 
         // For each connected mass, calculate the force
         for (std::vector<std::shared_ptr<Mass>>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
@@ -95,9 +95,21 @@ void Mass::rungeKutta(glm::vec3 force, float h)
 
 void Mass::connectMass(std::shared_ptr<Mass> m)
 {
-    //TODO: Check if already connected?
-    mConnectedMasses.push_back(m);
-    m->mConnectedMasses.push_back(std::shared_ptr<Mass>(this));
+    bool exists = false;
+
+    for(std::vector<std::shared_ptr<Mass>>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
+    {
+        /*if(m == it)
+        {
+            exists = true;
+        }*/
+    }
+
+    if(!exists)
+    {
+        mConnectedMasses.push_back(m);
+        m->mConnectedMasses.push_back(std::shared_ptr<Mass>(this));
+    }
 }
 
 void Mass::setStatic(bool b)

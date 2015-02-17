@@ -17,7 +17,7 @@ class Mass{
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 20.0f, float dampening = 0.4f);
+    Mass(glm::vec3 pos, float spring = 20.0f, float damping = 0.4f);
 
     //Destructor
     ~Mass();
@@ -71,7 +71,7 @@ private:
     glm::mat4 mTransform;
 
     float mMass = 1.0f;
-    float mSpringConstant, mDampeningConstant;
+    float mSpringConstant, mDampingConstant;
 
     //GL variables
     GLuint vao;
