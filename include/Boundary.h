@@ -19,9 +19,9 @@ public:
      * glm::vec3  b   the b corner
      *
      * like this:
-     *      +------+ <-(b)
-     *    .'|    .'|
-     *  +---+--+'  |
+     *      +------+ <-(b)      |y
+     *    .'|    .'|            | /z
+     *  +---+--+'  |            |/____x
      *  |   +--+---+
      *  | .'   | .'
      *  +------+'
@@ -39,7 +39,7 @@ public:
     float getTop();
     float getBottom();
 
-    void getProperPosition(glm::vec3 &pos);
+    void getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &vel);
 
 private:
     // our corners

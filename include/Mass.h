@@ -20,35 +20,35 @@ class Mass
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 9.0f, float damping = 0.9f);
+    Mass(glm::vec3 pos, float spring = 100.0f, float damping = 1.0f);
 
     //Destructor
     ~Mass();
 
-    //Update the simulation
+    // Update the simulation
     void update(float timeDelta, std::vector<std::shared_ptr<Boundary>> boundaries);
 
-    //Render debug cubes for debug mode
+    // Render debug cubes for debug mode
     void draw();
 
-    //Connect with another mass
+    // Connect with another mass
     void connectMass(std::shared_ptr<Mass> m);
 
-    //Set shader, ONLY USED WHEN IN DEBUG MODE.
+    // Set shader, ONLY USED WHEN IN DEBUG MODE.
     static void setShader(GLShader* shader);
 
-    //toggle if gravity is active
+    // toggle if gravity is active
     static void setGravity(bool b);
     void setStatic(bool b);
 
     static GLShader* getShader();
 
-    //Returns vertex position
+    // Returns vertex' positions
     glm::vec3 getPosition();
     glm::vec3 getInitialPosition();
 
+    // Get/Set velocity
     glm::vec3 getVelocity();
-    //Set velocity
     void setVelocity(glm::vec3 v);
 
 
@@ -65,16 +65,22 @@ private:
     static GLShader* basicShader;
     static bool gravityActive;
 
+    // physics stuff
+    float mMass = 0.7f;
+    float mSpringConstant, mDampingConstant;
+
+    // decide if point can move
     bool mIsStatic = false;
 
+    // velocity
     glm::vec3 mVelocity;
-
+    // current position
     glm::vec3 mPosition;
+    // initial position
     glm::vec3 mInitialPosition;
-    glm::mat4 mTransform;
 
-    float mMass = 1.0f;
-    float mSpringConstant, mDampingConstant;
+    // MVP stuff
+    glm::mat4 mTransform;
 
     //GL variables
     GLuint vao;

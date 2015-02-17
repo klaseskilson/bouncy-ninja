@@ -107,18 +107,18 @@ int main()
 
             timeDelta = glfwGetTime();
         }
+
         //DRAWING CALLS
         floor->draw();
         theBody.draw();
-
 
         //FPS counter
         nbrOfFrames++;
         //Only update once every second
         if (glfwGetTime() - lastFpsUpdate > 1.0f)
-       {
+        {
             std::stringstream ss;
-            ss << "FPS: " << double(nbrOfFrames) / (glfwGetTime() - lastFpsUpdate);
+            ss << "Bouncy Ninja - FPS: " << double(nbrOfFrames) / (glfwGetTime() - lastFpsUpdate);
             glfwSetWindowTitle(window, ss.str().c_str());
             lastFpsUpdate = glfwGetTime();
             nbrOfFrames = 0;

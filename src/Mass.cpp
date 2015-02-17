@@ -37,9 +37,6 @@ void Mass::update(float timeDelta, std::vector<std::shared_ptr<Boundary>> bounda
             F = F + glm::vec3(0.0f, -9.81f, 0.0f) * mMass;
         }
 
-        float k = mSpringConstant;
-        float b = mDampingConstant;
-
         // For each connected mass, calculate the force
         for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
         {
@@ -53,14 +50,16 @@ void Mass::update(float timeDelta, std::vector<std::shared_ptr<Boundary>> bounda
             glm::vec3 springVector = glm::normalize(toPoint) * springLength;
 
             //Spring force, Hook's
-            F = F - (toPoint - springVector) * k;
+            F = F - (toPoint - springVector) * mSpringConstant;
 
             //Difference in velocity
             glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);
 
             //Damping
-            F = F + (velocityDifference) * b;
+            F = F + (velocityDifference) * mDampingConstant;
         }
+
+        glm::vec3 oldPos = mPosition;
 
         //EULER
         rungeKutta(F, timeDelta);
@@ -68,7 +67,7 @@ void Mass::update(float timeDelta, std::vector<std::shared_ptr<Boundary>> bounda
         // collision detection!
         for (std::vector<std::shared_ptr<Boundary>>::iterator it = boundaries.begin(); it != boundaries.end(); ++it)
         {
-            (*it)->getProperPosition(mPosition);
+            (*it)->getProperPosition(mPosition, oldPos, mVelocity);
         }
     }
 }

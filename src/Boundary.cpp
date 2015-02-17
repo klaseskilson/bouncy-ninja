@@ -119,17 +119,27 @@ void Boundary::setShader(GLShader* s)
 
 float Boundary::getTop()
 {
-    return fmax(mA.y, mB.y);
+    return mB.y;
 }
 
 float Boundary::getBottom()
 {
-    return fmin(mA.y, mB.y);
+    return mA.y;
 }
 
-void Boundary::getProperPosition(glm::vec3 &pos)
+void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &vel)
 {
-    pos.y = fmax(getTop(), pos.y);
+    if (pos.x > mA.x && pos.x < mB.x && pos.z > mA.z && pos.z < mB.z)
+    {
+        if (pos.y < mB.y)
+        {
+            std::cout << "HIT! Setting " << pos.y << " to " << oldPos.y << std::endl;
+            vel.y = fmax(0.0f, vel.y);
+            vel.x = .0f * vel.x;
+            vel.z = .0f * vel.z;
+            pos.y = oldPos.y;
+        }
+    }
 }
 
 void Boundary::draw()

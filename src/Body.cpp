@@ -7,15 +7,14 @@ GLShader* Body::basicShader;
 
 Body::Body()
 {
-    //loadObj("../assets/cube.obj");
+    // loadObj("../assets/suzanne.obj");
 
-    //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
-    //tmpMass->setStatic(true);
 
-    createCube(3);
+    createCube(6);
 
-    mMasses.at(0)->setStatic(true);
-    mMasses.at(2)->setStatic(true);
+    // mMasses.at(0)->setStatic(true);
+    // mMasses.at(2)->setStatic(true);
+    // mMasses.at(8)->setVelocity(glm::vec3(-8.0f, 0.0f, 10.0f));
 
     //Rope
     // for (int i = 0; i < 15; i++)
@@ -27,7 +26,6 @@ Body::Body()
     //     }
     // }
     // mMasses.at(0)->setStatic(true);
-
 }
 
 Body::~Body()
@@ -147,7 +145,9 @@ void Body::loadObj(const char * path)
     //Connect masses with other masses using the index list
     for (int i = 0; i < indices.size()/3; i++)
     {
-        std::cout << "Connecting mass: " << indices.at(3 * i) << ", " << indices.at(3 * i + 1) << ", " << indices.at(3 * i + 2) << ".\n";
+        std::cout << "Connecting mass: " << indices.at(3 * i) << ", "
+            << indices.at(3 * i + 1) << ", " << indices.at(3 * i + 2) << ".\n";
+
         //indices.at(3*i) ska connecta med indices.at(3*i+1)
         mMasses.at(indices.at(3 * i))->connectMass(mMasses.at(indices.at(3 * i + 1)));
 
@@ -159,7 +159,6 @@ void Body::loadObj(const char * path)
 
     }
     mMasses.at(0)->setStatic(true);
-
 
     numberOfTriangles = indices.size() / 3;
     numberOfVertices = vertices.size();
