@@ -6,7 +6,6 @@ GLShader*  Body::basicShader;
 Body::Body()
 {
     loadObj("../assets/suzanne.obj");
-    std::cout << vertices.at(1);
 
     Mass* tmpMass = new Mass(glm::vec3(-1.0f,1.0f,1.0f));
     Mass* tmpMass2 = new Mass(glm::vec3(1.0f,1.0f,1.0f));
