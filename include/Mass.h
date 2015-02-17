@@ -57,7 +57,7 @@ public:
     void implicitEuler(glm::vec3 force, float h);
     void rungeKutta(glm::vec3 force, float h);
 
-    std::vector<std::shared_ptr<Mass>> mConnectedMasses;
+    std::vector<Mass*> mConnectedMasses;
 
 private:
     static GLShader* basicShader;

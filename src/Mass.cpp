@@ -22,6 +22,7 @@ Mass::Mass(glm::vec3 pos, float spring, float damping)
 
 Mass::~Mass()
 {
+
     //mConnectedMasses.clear();
 }
 
@@ -40,7 +41,7 @@ void Mass::update(float timeDelta)
         float b = mDampingConstant;
 
         // For each connected mass, calculate the force
-        for (std::vector<std::shared_ptr<Mass>>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
+        for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
         {
             // vector from this point to the (*it) point
             glm::vec3 toPoint = mPosition - (*it)->getPosition();
@@ -62,7 +63,7 @@ void Mass::update(float timeDelta)
         }
 
         //EULER
-        implicitEuler(F, timeDelta);
+        rungeKutta(F, timeDelta);
 
         // collision detection!
         // for (std::vector<std::shared_ptr<Boundary>>::iterator it = getBoundaries().begin(); it != getBoundaries().end(); ++it)
@@ -105,7 +106,7 @@ void Mass::connectMass(std::shared_ptr<Mass> m)
 {
     bool exists = false;
 
-    for(std::vector<std::shared_ptr<Mass>>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
+    for(std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
     {
         if(m->getPosition() == (*it)->getPosition())
         {
@@ -115,8 +116,8 @@ void Mass::connectMass(std::shared_ptr<Mass> m)
 
     if(!exists)
     {
-        mConnectedMasses.push_back(m);
-        m->mConnectedMasses.push_back(std::shared_ptr<Mass>(this));
+        mConnectedMasses.push_back(m.get());
+        m->mConnectedMasses.push_back(this);
     }
 }
 
