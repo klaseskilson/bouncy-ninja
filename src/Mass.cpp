@@ -22,21 +22,19 @@ Mass::Mass(glm::vec3 pos, float spring, float dampening)
 
 Mass::~Mass()
 {
-    std::cout << "Destroying Mass at " << mPosition << std::endl;
 }
-
 
 void Mass::update(float timeDelta)
 {
     if (!mIsStatic)
-        { 
+    {
         glm::vec3 F = glm::vec3(0.0f);
 
         if (gravityActive)
         {
             F = F + glm::vec3(0.0f, -9.81f, 0.0f) * mMass;
         }
-    
+
         float k = mSpringConstant;
         float b = mDampeningConstant;
 
@@ -63,7 +61,7 @@ void Mass::update(float timeDelta)
         }
 
         //EULER
-        implicitEuler(F, timeDelta);
+        rungeKutta(F, timeDelta);
     }
 }
 
@@ -85,6 +83,14 @@ void Mass::implicitEuler(glm::vec3 force, float h)
     mVelocity = mVelocity + a * h;
     //std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
+}
+
+void Mass::rungeKutta(glm::vec3 force, float h)
+{
+    glm::vec3 a = force / mMass;
+    mVelocity = mVelocity + h * a + ((h * h) / 2) * a;
+    ///std::cout << mVelocity << "\n";
+    mPosition = mPosition + h * mVelocity + ((h * h) / 2) * mVelocity; 
 }
 
 void Mass::connectMass(Mass* m)
@@ -247,5 +253,4 @@ void Mass::createDebugBox(float xsize, float ysize, float zsize)
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 }

@@ -6,36 +6,52 @@
 #include <iostream>
 #include <math.h>
 
+#include "bouncy_helpers.h"
+#include "GLShader.h"
 
 class Boundary
 {
 public:
-  /**
-   * create a boundary with two opposite corners in a and b
-   *
-   * glm::vec3  a   the a corner
-   * glm::vec3  b   the b corner
-   *
-   * like this:
-   *      +------+ <-(b)
-   *    .'|    .'|
-   *  +---+--+'  |
-   *  |   +--+---+
-   *  | .'   | .'
-   *  +------+'
-   *  ^(a)
-   */
-  Boundary(glm::vec3 a, glm::vec3 b)
-    : a(a), b(b) {}
+    /**
+     * create a boundary with two opposite corners in a and b
+     *
+     * glm::vec3  a   the a corner
+     * glm::vec3  b   the b corner
+     *
+     * like this:
+     *      +------+ <-(b)
+     *    .'|    .'|
+     *  +---+--+'  |
+     *  |   +--+---+
+     *  | .'   | .'
+     *  +------+'
+     *  ^(a)
+     */
+    Boundary(glm::vec3, glm::vec3);
 
-  // destructor
-  ~Boundary() {}
+    // destructor
+    ~Boundary();
 
-  float getTop();
-  float getBottom();
+    void setShader(GLShader*);
+
+    void draw();
+
+    float getTop();
+    float getBottom();
 
 private:
-  glm::vec3 a, b;
+    // our corners
+    glm::vec3 mA, mB;
+
+    //GL variables
+    GLShader* mShader;
+    GLuint mGlVao;
+    int mGlNumberOfVertices;
+    int mGlNumberOfTriangles;
+    GLuint mGlVertexBuffer;
+    GLuint mGlIndexBuffer;
+    GLfloat *mGlVertexArray;
+    GLuint *mGlIndexArray;
 };
 
 #endif // BOUNDARY_H_
