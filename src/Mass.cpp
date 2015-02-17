@@ -61,7 +61,7 @@ void Mass::update(float timeDelta)
         }
 
         //EULER
-        rungeKutta(F, timeDelta);
+        implicitEuler(F, timeDelta);
 
         // collision detection!
         // for (std::vector<std::shared_ptr<Boundary>>::iterator it = getBoundaries().begin(); it != getBoundaries().end(); ++it)

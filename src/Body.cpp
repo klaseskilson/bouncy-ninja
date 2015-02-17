@@ -7,22 +7,11 @@ Body::Body()
 {
     //loadObj("../assets/cube.obj");
 
-    for(int x = 0; x < 3; x++)
-    {
-        for(int y = 0; y < 3; y++)
-        {
-            for(int z = 0; z < 3; z++)
-            {
-                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
-            }
-        }
-    }
-
     //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
 
     //tmpMass->setStatic(true);
-
-    mMasses.at(1)->connectMass(mMasses.at(2));
+    createCube(3);
+    
 }
 
 Body::~Body()
@@ -84,6 +73,38 @@ void Body::setShader(GLShader* shader)
 GLShader* Body::getShader()
 {
     return basicShader;
+}
+
+void Body::createCube(int k)
+{
+    for(int x = 0; x < k; x++)
+    {
+        for(int y = 0; y < k; y++)
+        {
+            for(int z = 0; z < k; z++)
+            {
+                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
+            }
+        }
+    }
+
+    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(k+1)->getPosition());
+
+    for(std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
+    {
+        for(std::vector<std::shared_ptr<Mass>>::iterator it2 = mMasses.begin(); it2 != mMasses.end(); ++it2)
+        {
+            if((glm::length((*it)->getPosition() - (*it2)->getPosition())) <= radius && 
+                (glm::length((*it)->getPosition() - (*it2)->getPosition())) != 0.0)
+            {
+               (*it)->connectMass(*it2);
+            }
+        }
+        //std::cout << *it << " " << *std::next(it,1) << '\n';
+    }
+
+    mMasses.at(0)->setStatic(true);
+    mMasses.at(2)->setStatic(true);
 }
 
 void Body::loadObj(const char * path)

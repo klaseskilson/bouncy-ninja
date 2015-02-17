@@ -23,6 +23,7 @@ public:
     void addBoundary(std::shared_ptr<Boundary>);
     std::vector<std::shared_ptr<Boundary>> getBoundaries();
 
+    void createCube(int k);
     void loadObj(const char * path);
 
     static void setShader(GLShader* shader);
