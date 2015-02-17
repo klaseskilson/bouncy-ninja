@@ -100,7 +100,7 @@ void Body::createCube(int k)
         }
     }
 
-    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(k+1)->getPosition());
+    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(3*3*3-1)->getPosition());
 
     for(std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
     {
