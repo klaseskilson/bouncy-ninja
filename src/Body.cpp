@@ -1,10 +1,12 @@
 #include "Body.h"
 #include <iostream>
 bool Body::mDebug = true;
-GLShader*  Body::basicShader;
+GLShader* Body::basicShader;
 
 Body::Body()
 {
+    //loadObj("../assets/cube.obj");
+
     for(int x = 0; x < 3; x++)
     {
         for(int y = 0; y < 3; y++)
@@ -16,14 +18,11 @@ Body::Body()
         }
     }
 
-    //loadObj("../assets/suzanne.obj");
-
     //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
 
     //tmpMass->setStatic(true);
 
     mMasses.at(1)->connectMass(mMasses.at(2));
-
 }
 
 Body::~Body()
@@ -72,6 +71,11 @@ void Body::addBoundary(std::shared_ptr<Boundary> b)
     mBoundaries.push_back(b);
 }
 
+std::vector<std::shared_ptr<Boundary>> Body::getBoundaries()
+{
+    return mBoundaries;
+}
+
 void Body::setShader(GLShader* shader)
 {
     basicShader = shader;
@@ -87,14 +91,15 @@ void Body::loadObj(const char * path)
     std::vector<glm::vec3> out_vertices;
     std::vector<glm::vec2> out_uvs;
     std::vector<glm::vec3> out_normals;
-    
+
     loadOBJ(path, out_vertices, out_uvs, out_normals);
 
     indexVBO(out_vertices, out_uvs, out_normals, indices, vertices, uvs, normals);
-    
-    
+
+
     for (int i = 0; i < vertices.size(); i++)
     {
+        mMasses.push_back(std::shared_ptr<Mass>(new Mass(vertices.at(i))));
         vertexarray.push_back(vertices.at(i).x);
         vertexarray.push_back(vertices.at(i).y);
         vertexarray.push_back(vertices.at(i).z);
@@ -104,6 +109,23 @@ void Body::loadObj(const char * path)
         vertexarray.push_back(uvs.at(i).x);
         vertexarray.push_back(uvs.at(i).y);
     }
+
+    //Connect masses with other masses using the index list
+    for (int i = 0; i < indices.size()/3; i++)
+    {
+        std::cout << "Connecting mass: " << indices.at(3 * i) << " with " << indices.at(3 * i + 1) << "and " << indices.at(3 * i + 2) << "\n";
+        //indices.at(3*i) ska connecta med indices.at(3*i+1)
+        mMasses.at(indices.at(3 * i))->connectMass(mMasses.at(indices.at(3 * i + 1)));
+        
+        //indices.at(3*i+1) ska connecta med indices.at(3*i+2)
+        mMasses.at(indices.at(3 * i + 1))->connectMass(mMasses.at(indices.at(3 * i + 2)));
+
+        //indices.at(3*i+2) ska connecta med indices.at(3*i)
+        mMasses.at(indices.at(3 * i + 2))->connectMass(mMasses.at(indices.at(3 * i)));
+
+    }
+    mMasses.at(0)->setStatic(true);
+
 
     numberOfTriangles = indices.size() / 3;
     numberOfVertices = vertices.size();
