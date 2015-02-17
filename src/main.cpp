@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <stdio.h>
+#include <sstream>
 
 #include "bouncy_helpers.h"
 
@@ -83,6 +84,8 @@ int main()
 
     float timeDelta = glfwGetTime();
     float cappedStep = 0.01f;
+    float lastFpsUpdate = 0.0f;
+    int nbrOfFrames = 0;
 
     printf("\nLet's get ready to render!\n\n");
     while (!glfwWindowShouldClose(window))
@@ -90,6 +93,7 @@ int main()
         // wipe the drawing surface clear
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //Simulation update
         if (gRunSimulation)
         {
             if ((glfwGetTime() - timeDelta) > cappedStep)
@@ -100,11 +104,25 @@ int main()
             {
                 theBody.update(glfwGetTime() - timeDelta);
             }
+
             timeDelta = glfwGetTime();
         }
-
+        //DRAWING CALLS
         floor->draw();
         theBody.draw();
+
+
+        //FPS counter
+        nbrOfFrames++;
+        //Only update once every second
+        if (glfwGetTime() - lastFpsUpdate > 1.0f)
+       {
+            std::stringstream ss;
+            ss << "FPS: " << double(nbrOfFrames) / (glfwGetTime() - lastFpsUpdate);
+            glfwSetWindowTitle(window, ss.str().c_str());
+            lastFpsUpdate = glfwGetTime();
+            nbrOfFrames = 0;
+        }
 
         // update other events like input handling
         glfwPollEvents();
