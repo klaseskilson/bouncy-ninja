@@ -14,7 +14,10 @@
 #include "bouncy_helpers.h"
 #include "GLShader.h"
 
-class Mass {
+class Body;
+
+class Mass
+{
 public:
     //Constructors
     Mass();

@@ -1,7 +1,10 @@
 #include "Body.h"
 #include <iostream>
+
+// prepare static members
 bool Body::mDebug = true;
 GLShader* Body::basicShader;
+std::vector<std::shared_ptr<Boundary>> Body::mBoundaries;
 
 Body::Body()
 {
@@ -116,7 +119,7 @@ void Body::loadObj(const char * path)
         std::cout << "Connecting mass: " << indices.at(3 * i) << " with " << indices.at(3 * i + 1) << "and " << indices.at(3 * i + 2) << "\n";
         //indices.at(3*i) ska connecta med indices.at(3*i+1)
         mMasses.at(indices.at(3 * i))->connectMass(mMasses.at(indices.at(3 * i + 1)));
-        
+
         //indices.at(3*i+1) ska connecta med indices.at(3*i+2)
         mMasses.at(indices.at(3 * i + 1))->connectMass(mMasses.at(indices.at(3 * i + 2)));
 
