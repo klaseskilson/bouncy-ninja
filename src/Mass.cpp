@@ -107,10 +107,10 @@ void Mass::connectMass(std::shared_ptr<Mass> m)
 
     for(std::vector<std::shared_ptr<Mass>>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
     {
-        /*if(m == it)
+        if(m->getPosition() == (*it)->getPosition())
         {
             exists = true;
-        }*/
+        }
     }
 
     if(!exists)
