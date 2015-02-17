@@ -86,7 +86,7 @@ int main()
     Body theBody = Body();
 
     // create our floor and set it up
-    std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-10.0f, -10.0f, -10.0f), glm::vec3(10.0f, -9.9f, 10.0f)));
+    std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-10.0f, -10.0f, -10.0f), glm::vec3(10.0f, -2.9f, 10.0f)));
     theBody.addBoundary(floor);
     floor->setShader(simpleShader);
 
@@ -174,7 +174,7 @@ void updateCamera()
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     // Camera matrix
     glm::mat4 rotationMat = glm::eulerAngleYZ(mouseXPos*0.01f, mouseYPos*0.01f);
-    glm::vec4 cameraPosition = glm::vec4(10.0f, 0.0f, 0.0f,1.0f) * rotationMat;
+    glm::vec4 cameraPosition = glm::vec4(7.0f, 0.0f, 7.0f,1.0f) * rotationMat;
     glm::vec3 cameraPos = glm::vec3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
     //glm::vec3 cameraPos = glm::vec3(0.0f, 7.0f, 10.0f);
 

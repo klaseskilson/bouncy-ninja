@@ -20,7 +20,7 @@ class Mass
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 100.0f, float damping = 1.0f);
+    Mass(glm::vec3 pos, float spring = 600.0f, float damping = 5.0f);
 
     //Destructor
     ~Mass();
@@ -66,7 +66,7 @@ private:
     static bool gravityActive;
 
     // physics stuff
-    float mMass = 0.7f;
+    float mMass = 10.0f;
     float mSpringConstant, mDampingConstant;
 
     // decide if point can move
