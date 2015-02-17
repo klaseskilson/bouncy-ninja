@@ -12,7 +12,7 @@ Body::Body()
     //tmpMass4->setVelocity(glm::vec3(-8.0f,0.0f,0.0f));
     //tmpMass->setStatic(true);
 
-    createCube(3);
+    createCube(3, 0.5, glm::vec3(1.0,1.0, 1.0));
 
     mMasses.at(0)->setStatic(true);
     mMasses.at(2)->setStatic(true);
@@ -91,20 +91,21 @@ GLShader* Body::getShader()
     return basicShader;
 }
 
-void Body::createCube(int k)
+void Body::createCube(int nMasses, float massDistance, glm::vec3 startingPoint)
 {
-    for(int x = 0; x < k; x++)
+    std::cout << startingPoint.x;
+    for(int x = 0; x < nMasses; x++)
     {
-        for(int y = 0; y < k; y++)
+        for(int y = 0; y < nMasses; y++)
         {
-            for(int z = 0; z < k; z++)
+            for(int z = 0; z < nMasses; z++)
             {
-                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((1.0-x), (1.0-y), (1.0-z)))));
+                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((startingPoint.x-x*massDistance), (startingPoint.y-y*massDistance), (startingPoint.z-z*massDistance)))));
             }
         }
     }
 
-    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(k * (k + 1) + 1)->getPosition());
+    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(nMasses * (nMasses + 1) + 1)->getPosition());
 
     for(std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
     {
