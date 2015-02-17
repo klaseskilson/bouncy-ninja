@@ -77,7 +77,7 @@ int main()
     Body theBody = Body();
 
     // create our floor and set it up
-    std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, -0.9f, 1.0f)));
+    std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-10.0f, -10.0f, -10.0f), glm::vec3(10.0f, -9.9f, 10.0f)));
     theBody.addBoundary(floor);
     floor->setShader(simpleShader);
 

@@ -1,14 +1,12 @@
 #include "Body.h"
 #include <iostream>
 bool Body::mDebug = true;
-GLShader*  Body::basicShader;
+GLShader* Body::basicShader;
 
 Body::Body()
 {
     loadObj("../assets/cube.obj");
 
-
-    /*
     for(int x = 0; x < 3; x++)
     {
         for(int y = 0; y < 3; y++)
@@ -19,7 +17,6 @@ Body::Body()
             }
         }
     }
-    */
 }
 
 Body::~Body()
@@ -68,6 +65,11 @@ void Body::addBoundary(std::shared_ptr<Boundary> b)
     mBoundaries.push_back(b);
 }
 
+std::vector<std::shared_ptr<Boundary>> Body::getBoundaries()
+{
+    return mBoundaries;
+}
+
 void Body::setShader(GLShader* shader)
 {
     basicShader = shader;
@@ -83,12 +85,12 @@ void Body::loadObj(const char * path)
     std::vector<glm::vec3> out_vertices;
     std::vector<glm::vec2> out_uvs;
     std::vector<glm::vec3> out_normals;
-    
+
     loadOBJ(path, out_vertices, out_uvs, out_normals);
 
     indexVBO(out_vertices, out_uvs, out_normals, indices, vertices, uvs, normals);
-    
-    
+
+
     for (int i = 0; i < vertices.size(); i++)
     {
         mMasses.push_back(std::shared_ptr<Mass>(new Mass(vertices.at(i))));
