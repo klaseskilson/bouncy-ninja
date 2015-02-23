@@ -130,9 +130,9 @@ float Boundary::getBottom()
 void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &vel)
 {
     // detect if pos is within the boundary's limits
-    if (pos.x > mA.x && pos.x < mB.x &&
-        pos.y > mA.y && pos.y < mB.y &&
-        pos.z > mA.z && pos.z < mB.z)
+    if ((pos.x > mA.x && pos.x < mB.x) &&
+        (pos.y > mA.y && pos.y < mB.y) &&
+        (pos.z > mA.z && pos.z < mB.z))
     {
         // Here, we are making sure that the speed of our object isn't
         // increasing in the direction of our boundary.
@@ -146,8 +146,9 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // limit speed
             vel.x = fmax(0.0f, vel.x);
             // "friction"
-            vel.y = mFriction * vel.y;
-            vel.z = mFriction * vel.z;
+            // vel.y = mFriction * vel.y;
+            // vel.z = mFriction * vel.z;
+            pos.x = oldPos.x;
         }
         // negative x-side
         if (pos.y > mA.y && pos.y < mB.y && pos.z > mA.z && pos.z < mB.z && oldPos.x < mA.x)
@@ -157,6 +158,7 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // "friction"
             vel.y = mFriction * vel.y;
             vel.z = mFriction * vel.z;
+            pos.x = oldPos.x;
         }
         // positive y-side
         if (pos.x > mA.x && pos.x < mB.x && pos.z > mA.z && pos.z < mB.z && oldPos.y > mB.y)
@@ -166,6 +168,7 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // "friction"
             vel.x = mFriction * vel.x;
             vel.z = mFriction * vel.z;
+            pos.y = oldPos.y;
         }
         // negative y-side
         if (pos.x > mA.x && pos.x < mB.x && pos.z > mA.z && pos.z < mB.z && oldPos.y < mA.y)
@@ -175,6 +178,7 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // "friction"
             vel.x = mFriction * vel.x;
             vel.z = mFriction * vel.z;
+            pos.y = oldPos.y;
         }
         // positive z-side
         if (pos.x > mA.x && pos.x < mB.x && pos.y > mA.y && pos.y < mB.y && oldPos.z > mB.z)
@@ -184,6 +188,7 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // "friction"
             vel.x = mFriction * vel.x;
             vel.y = mFriction * vel.y;
+            pos.z = oldPos.z;
         }
         // negative z-side
         if (pos.x > mA.x && pos.x < mB.x && pos.y > mA.y && pos.y < mB.y && oldPos.z < mA.z)
@@ -193,6 +198,7 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // "friction"
             vel.x = mFriction * vel.x;
             vel.y = mFriction * vel.y;
+            pos.z = oldPos.z;
         }
 
         // Aaaaand adjust the position
