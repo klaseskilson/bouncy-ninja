@@ -20,7 +20,7 @@ class Mass
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 2000.0f, float damping = 5.0f);
+    Mass(glm::vec3 pos, float spring = 4000.0f, float damping = 7.0f);
 
     //Destructor
     ~Mass();

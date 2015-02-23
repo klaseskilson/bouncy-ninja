@@ -129,16 +129,17 @@ float Boundary::getBottom()
 
 void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &vel)
 {
-    if (pos.x > mA.x && pos.x < mB.x && pos.z > mA.z && pos.z < mB.z)
+    // detect if pos is within the boundary's limits
+    if (pos.x > mA.x && pos.x < mB.x && pos.y > mA.y && pos.y < mB.y && pos.z > mA.z && pos.z < mB.z)
     {
-        if (pos.y < mB.y)
-        {
-            // std::cout << "HIT! Setting " << pos.y << " to " << oldPos.y << std::endl;
-            vel.y = fmax(0.0f, vel.y);
-            vel.x = .5f * vel.x;
-            vel.z = .5f * vel.z;
-            pos.y = oldPos.y;
-        }
+        // std::cout << "HIT! Setting " << pos.y << " to " << oldPos.y << std::endl;
+        vel.y = fmax(0.0f, vel.y);
+
+        // "friction"
+        vel.x = .99f * vel.x;
+        vel.z = .99f * vel.z;
+
+        pos.y = oldPos.y;
     }
 }
 
