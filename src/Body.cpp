@@ -22,32 +22,6 @@ Body::Body()
     mMasses.at(25+2)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
     mMasses.at(25+3)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
     mMasses.at(25+4)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-
-    mMasses.at(0)->connectMass(mMasses.at(4));
-    mMasses.at(0)->connectMass(mMasses.at(20));
-    mMasses.at(0)->connectMass(mMasses.at(100));
-    mMasses.at(4)->connectMass(mMasses.at(24));
-
-    mMasses.at(4)->connectMass(mMasses.at(104));
-    mMasses.at(20)->connectMass(mMasses.at(24));
-    mMasses.at(20)->connectMass(mMasses.at(120));
-    mMasses.at(24)->connectMass(mMasses.at(124));
-
-    mMasses.at(100)->connectMass(mMasses.at(104));
-    mMasses.at(100)->connectMass(mMasses.at(120));
-    mMasses.at(120)->connectMass(mMasses.at(124));
-    mMasses.at(104)->connectMass(mMasses.at(124));
-
-    //Rope
-    // for (int i = 0; i < 15; i++)
-    // {
-    //     mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3(0.1f*(float)i, 6.0f, 0.0f))));
-    //     if (i > 0)
-    //     {
-    //         mMasses.at(i)->connectMass(mMasses.at(i - 1));
-    //     }
-    // }
-    // mMasses.at(0)->setStatic(true);
 }
 
 Body::~Body()
@@ -111,6 +85,20 @@ GLShader* Body::getShader()
     return basicShader;
 }
 
+// TODO: implement width and make the rope 2*2*length
+void Body::createRope(int length, float width, glm::vec3 sPoint)
+{
+    for (int i = 0; i < length; i++)
+    {
+        mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3(0.1f*(float)i, 6.0f, 0.0f))));
+        if (i > 0)
+        {
+            mMasses.at(i)->connectMass(mMasses.at(i - 1));
+        }
+    }
+    mMasses.at(0)->setStatic(true);
+}
+
 void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
 {
     for(int x = 0; x < nMasses; x++)
@@ -138,6 +126,34 @@ void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
             }
         }
         //std::cout << *it << " " << *std::next(it,1) << '\n';
+    }
+
+    // connect the corners, only for nMasses > 2
+    if (nMasses > 2)
+    {
+        // we are trying to connect the corners, which are found like this
+        //        n*n-1 +------+ n-1
+        //            .'|    .'|
+        //  n(n-1)  +---+--+'  | 0
+        // n*n*n-1  |   +--+---+ n*n(n-1)+n-1
+        //          | .'   | .'
+        // n(n*n-1) +------+' n*n(n-1)
+
+        int n = nMasses;
+
+        // this could be done in a neat loop
+        mMasses.at(0)->connectMass(mMasses.at(n - 1));
+        mMasses.at(0)->connectMass(mMasses.at(n*(n - 1)));
+        mMasses.at(0)->connectMass(mMasses.at(n * n * (n - 1)));
+        mMasses.at(n - 1)->connectMass(mMasses.at(n * n - 1));
+        mMasses.at(n - 1)->connectMass(mMasses.at((n - 1)*(n * n + 1)));
+        mMasses.at(n * (n - 1))->connectMass(mMasses.at(n * n - 1));
+        mMasses.at(n * (n - 1))->connectMass(mMasses.at(n * n * n - n));
+        mMasses.at(n * n - 1)->connectMass(mMasses.at(n * n * n - 1));
+        mMasses.at(n * n * (n - 1))->connectMass(mMasses.at((n - 1)*(n * n + 1)));
+        mMasses.at(n * n * (n - 1))->connectMass(mMasses.at(n * n * n - n));
+        mMasses.at(n * n * n - n)->connectMass(mMasses.at(n * n * n - 1));
+        mMasses.at((n - 1)*(n * n + 1))->connectMass(mMasses.at(n * n * n - 1));
     }
 }
 
