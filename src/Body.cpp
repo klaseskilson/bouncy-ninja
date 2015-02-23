@@ -8,16 +8,16 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createCube(3, 0.8, glm::vec3(1.0,1.0,1.0));
+    createCube(5, 0.8, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
-    mMasses.at(0)->setVelocity(glm::vec3(0.0f, 10.0f, 0.0f));
-    mMasses.at(1)->setVelocity(glm::vec3(0.0f, 10.0f, 0.0f));
-    mMasses.at(2)->setVelocity(glm::vec3(0.0f, 10.0f, 0.0f));
-    mMasses.at(24)->setVelocity(glm::vec3(0.0f, -10.0f, 0.0f));
-    mMasses.at(25)->setVelocity(glm::vec3(0.0f, -10.0f, 0.0f));
-    mMasses.at(26)->setVelocity(glm::vec3(0.0f, -10.0f, 0.0f));
+    mMasses.at(0)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
+    mMasses.at(1)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
+    mMasses.at(2)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
+    mMasses.at(24)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
+    mMasses.at(25)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
+    mMasses.at(26)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
 
     //Rope
     // for (int i = 0; i < 15; i++)

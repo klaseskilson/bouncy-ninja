@@ -133,10 +133,10 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
     {
         if (pos.y < mB.y)
         {
-            std::cout << "HIT! Setting " << pos.y << " to " << oldPos.y << std::endl;
+            // std::cout << "HIT! Setting " << pos.y << " to " << oldPos.y << std::endl;
             vel.y = fmax(0.0f, vel.y);
-            vel.x = .0f * vel.x;
-            vel.z = .0f * vel.z;
+            vel.x = .5f * vel.x;
+            vel.z = .5f * vel.z;
             pos.y = oldPos.y;
         }
     }

@@ -91,11 +91,12 @@ int main()
     floor->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
-    float cappedStep = 0.01f;
+    float cappedStep = 0.001f;
     float lastFpsUpdate = 0.0f;
     int nbrOfFrames = 0;
 
     printf("\nLet's get ready to render!\n\n");
+    glfwSwapInterval(0);
     while (!glfwWindowShouldClose(window))
     {
         // wipe the drawing surface clear
