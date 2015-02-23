@@ -26,17 +26,22 @@ public:
 
     void createCube(int nMasses, float massDistance, glm::vec3 sPoint);
     void loadObj(const char * path);
-
+    
     static void setShader(GLShader* shader);
     static GLShader* getShader();
 
     static void toggleDebug() {mDebug = !mDebug;}
 
 private:
+    void updateGL();
+    void updateVertices();
+
+
     static bool mDebug;
     std::vector<std::shared_ptr<Mass>> mMasses;
     std::vector<std::shared_ptr<Boundary>> mBoundaries;
 
+    int boxSize;
     //GL variables
     static GLShader* basicShader;
 
