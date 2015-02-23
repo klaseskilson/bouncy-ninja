@@ -25,6 +25,7 @@ public:
     std::vector<std::shared_ptr<Boundary>> getBoundaries();
 
     void createCube(int nMasses, float massDistance, glm::vec3 sPoint);
+    void createRope(int nMasses, float width, glm::vec3 sPoint);
     void loadObj(const char * path);
     
     static void setShader(GLShader* shader);
