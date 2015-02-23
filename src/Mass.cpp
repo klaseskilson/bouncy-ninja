@@ -100,16 +100,16 @@ void Mass::rungeKutta(glm::vec3 force, float h)
     glm::vec3 a = force / mMass;
 
     glm::vec3 kv1 = a * h;
-    glm::vec3 kv2 = a + (h / 2) * kv1;
-    glm::vec3 kv3 = a + (h / 2) * kv2;
-    glm::vec3 kv4 = a + h * kv3;
-    mVelocity = mVelocity + ((h / 6) * (kv1 + (two * kv2) + (two * kv3) + kv4));
+    glm::vec3 kv2 = a * h + ((h * h) / 2) * kv1;
+    glm::vec3 kv3 = a * h + ((h * h) / 2) * kv2;
+    glm::vec3 kv4 = a * h + h * h * kv3;
+    mVelocity = mVelocity + ((1 / 6.f) * (kv1 + (two * kv2) + (two * kv3) + kv4));
 
     glm::vec3 kx1 = mVelocity * h;
-    glm::vec3 kx2 = mVelocity + (h / 2) * kx1;
-    glm::vec3 kx3 = mVelocity + (h / 2) * kx2;
-    glm::vec3 kx4 = mVelocity + h * kx3;
-    mPosition = mPosition + (h / 6) * (kx1 + (two * kx2) + (two * kx3) + kx4);
+    glm::vec3 kx2 = mVelocity * h + ((h * h) / 2) * kx1;
+    glm::vec3 kx3 = mVelocity * h + ((h * h) / 2) * kx2;
+    glm::vec3 kx4 = mVelocity * h + h * kx3;
+    mPosition = mPosition + (1 / 6.f) * (kx1 + (two * kx2) + (two * kx3) + kx4);
 }
 
 void Mass::connectMass(std::shared_ptr<Mass> m)
