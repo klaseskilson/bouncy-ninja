@@ -130,15 +130,78 @@ float Boundary::getBottom()
 void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &vel)
 {
     // detect if pos is within the boundary's limits
-    if (pos.x > mA.x && pos.x < mB.x && pos.y > mA.y && pos.y < mB.y && pos.z > mA.z && pos.z < mB.z)
+    if ((pos.x > mA.x && pos.x < mB.x) &&
+        (pos.y > mA.y && pos.y < mB.y) &&
+        (pos.z > mA.z && pos.z < mB.z))
     {
-        // std::cout << "HIT! Setting " << pos.y << " to " << oldPos.y << std::endl;
-        vel.y = fmax(0.0f, vel.y);
+        // Here, we are making sure that the speed of our object isn't
+        // increasing in the direction of our boundary.
+        // It's about to get ugly. First we see what direction the body is going
+        // for (which is what we do in this mess of if statements), and then we
+        // modify the velocity based on that knowledge.
 
-        // "friction"
-        vel.x = .99f * vel.x;
-        vel.z = .99f * vel.z;
+        // positive x-side
+        if (pos.y > mA.y && pos.y < mB.y && pos.z > mA.z && pos.z < mB.z && oldPos.x > mB.x)
+        {
+            // limit speed
+            vel.x = fmax(0.0f, vel.x);
+            // "friction"
+            // vel.y = mFriction * vel.y;
+            // vel.z = mFriction * vel.z;
+            pos.x = oldPos.x;
+        }
+        // negative x-side
+        if (pos.y > mA.y && pos.y < mB.y && pos.z > mA.z && pos.z < mB.z && oldPos.x < mA.x)
+        {
+            // limit speed
+            vel.x = fmin(0.0f, vel.x);
+            // "friction"
+            vel.y = mFriction * vel.y;
+            vel.z = mFriction * vel.z;
+            pos.x = oldPos.x;
+        }
+        // positive y-side
+        if (pos.x > mA.x && pos.x < mB.x && pos.z > mA.z && pos.z < mB.z && oldPos.y > mB.y)
+        {
+            // limit speed
+            vel.y = fmax(0.0f, vel.y);
+            // "friction"
+            vel.x = mFriction * vel.x;
+            vel.z = mFriction * vel.z;
+            pos.y = oldPos.y;
+        }
+        // negative y-side
+        if (pos.x > mA.x && pos.x < mB.x && pos.z > mA.z && pos.z < mB.z && oldPos.y < mA.y)
+        {
+            // limit speed
+            vel.y = fmin(0.0f, vel.y);
+            // "friction"
+            vel.x = mFriction * vel.x;
+            vel.z = mFriction * vel.z;
+            pos.y = oldPos.y;
+        }
+        // positive z-side
+        if (pos.x > mA.x && pos.x < mB.x && pos.y > mA.y && pos.y < mB.y && oldPos.z > mB.z)
+        {
+            // limit speed
+            vel.z = fmax(0.0f, vel.z);
+            // "friction"
+            vel.x = mFriction * vel.x;
+            vel.y = mFriction * vel.y;
+            pos.z = oldPos.z;
+        }
+        // negative z-side
+        if (pos.x > mA.x && pos.x < mB.x && pos.y > mA.y && pos.y < mB.y && oldPos.z < mA.z)
+        {
+            // limit speed
+            vel.z = fmin(0.0f, vel.z);
+            // "friction"
+            vel.x = mFriction * vel.x;
+            vel.y = mFriction * vel.y;
+            pos.z = oldPos.z;
+        }
 
+        // Aaaaand adjust the position
         pos.y = oldPos.y;
     }
 }

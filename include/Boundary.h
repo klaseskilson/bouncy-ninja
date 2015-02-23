@@ -44,6 +44,7 @@ public:
 private:
     // our corners
     glm::vec3 mA, mB;
+    float mFriction = .95f;
 
     //GL variables
     GLShader* mShader;

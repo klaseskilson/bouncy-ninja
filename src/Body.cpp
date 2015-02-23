@@ -12,12 +12,31 @@ Body::Body()
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
-    mMasses.at(0)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
-    mMasses.at(1)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
-    mMasses.at(2)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
-    mMasses.at(24)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
-    mMasses.at(25)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
-    mMasses.at(26)->setVelocity(glm::vec3(10.0f, 0.0f, 10.0f));
+    mMasses.at(0)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(1)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(2)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(3)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(4)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(25+0)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(25+1)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(25+2)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(25+3)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    mMasses.at(25+4)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+
+    mMasses.at(0)->connectMass(mMasses.at(4));
+    mMasses.at(0)->connectMass(mMasses.at(20));
+    mMasses.at(0)->connectMass(mMasses.at(100));
+    mMasses.at(4)->connectMass(mMasses.at(24));
+
+    mMasses.at(4)->connectMass(mMasses.at(104));
+    mMasses.at(20)->connectMass(mMasses.at(24));
+    mMasses.at(20)->connectMass(mMasses.at(120));
+    mMasses.at(24)->connectMass(mMasses.at(124));
+
+    mMasses.at(100)->connectMass(mMasses.at(104));
+    mMasses.at(100)->connectMass(mMasses.at(120));
+    mMasses.at(120)->connectMass(mMasses.at(124));
+    mMasses.at(104)->connectMass(mMasses.at(124));
 
     //Rope
     // for (int i = 0; i < 15; i++)
@@ -100,7 +119,8 @@ void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
         {
             for(int z = 0; z < nMasses; z++)
             {
-                mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3((sPoint.x-x*massDistance), (sPoint.y-y*massDistance), (sPoint.z-z*massDistance)))));
+                mMasses.push_back(std::shared_ptr<Mass>(
+                    new Mass(glm::vec3(sPoint.x-x*massDistance, sPoint.y-y*massDistance, sPoint.z-z*massDistance))));
             }
         }
     }

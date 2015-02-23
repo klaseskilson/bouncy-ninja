@@ -89,6 +89,10 @@ int main()
     std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-10.0f, -10.0f, -10.0f), glm::vec3(10.0f, -2.9f, 10.0f)));
     theBody.addBoundary(floor);
     floor->setShader(simpleShader);
+    // create wall and set it upp
+    std::shared_ptr<Boundary> wall(new Boundary(glm::vec3(-11.0f, -10.0f, -10.0f), glm::vec3(-10.0f, 10.0f, 10.0f)));
+    theBody.addBoundary(wall);
+    wall->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
     float cappedStep = 0.001f;
@@ -121,6 +125,7 @@ int main()
 
         //DRAWING CALLS
         floor->draw();
+        wall->draw();
         theBody.draw();
 
         //FPS counter
