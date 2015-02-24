@@ -1,5 +1,14 @@
 #include "bouncy_helpers.h"
 
+glm::vec3 pow(glm::vec3 v, int e)
+{
+    for (int i = 1; i < e; ++i)
+    {
+        v *= v;
+    }
+    return v;
+}
+
 std::ostream &operator<< (std::ostream &out, const glm::vec3 &vec) {
     out << "{"
         << vec.x << " " << vec.y << " "<< vec.z

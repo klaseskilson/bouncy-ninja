@@ -6,6 +6,8 @@
 
 #define PI 3.14159265359
 
+glm::vec3 pow(glm::vec3, int);
+
 std::ostream &operator<< (std::ostream &out, const glm::vec3 &vec);
 std::ostream &operator<< (std::ostream &out, const glm::vec2 &vec);
 std::ostream &operator<< (std::ostream &out, const glm::mat4 &mat);
