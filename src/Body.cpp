@@ -8,7 +8,7 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createBox(2, 3, 4, 0.3, glm::vec3(1.0,1.0,1.0));
+    createBox(5, 5, 5, 0.3, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
@@ -139,7 +139,8 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
 
         int n = xSize;
 
-        // this could be done in a neat loop
+        // neighbours
+        // this could maby be done in a neat loop
         mMasses.at(0)->connectMass(mMasses.at(xSize-1));
         mMasses.at(0)->connectMass(mMasses.at((ySize-1)*xSize));
         mMasses.at(0)->connectMass(mMasses.at(ySize*xSize*(zSize-1)));
@@ -152,7 +153,11 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
         mMasses.at(ySize*xSize*(zSize - 1))->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
         mMasses.at(xSize*ySize*(zSize - 1) + xSize - 1)->connectMass(mMasses.at((xSize*ySize*zSize) - 1));
         mMasses.at((xSize*ySize*zSize) - 1)->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
-
+        // opposite corners
+        mMasses.at((ySize - 1)*xSize)->connectMass(mMasses.at(xSize*ySize*(zSize - 1) + xSize - 1));
+        mMasses.at(0)->connectMass(mMasses.at((xSize*ySize*zSize) - 1));
+        mMasses.at(ySize*xSize*(zSize - 1))->connectMass(mMasses.at((ySize*xSize) - 1));
+        mMasses.at(xSize*((ySize*zSize) - 1))->connectMass(mMasses.at(xSize-1));
     }
 
 
@@ -164,7 +169,7 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
 void Body::updateVertices()
 {
     vertexarray.clear();
-    
+
     for (int i = 0; i < xSize*ySize; i++)
     {
         vertices.push_back(mMasses.at(i)->getPosition());
@@ -232,7 +237,7 @@ void Body::updateVertices()
             vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
             vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
 
-            //normal ska vara -1 0 0 
+            //normal ska vara -1 0 0
             vertexarray.push_back(-1.0f);
             vertexarray.push_back(0.0f);
             vertexarray.push_back(0.0f);
@@ -253,7 +258,7 @@ void Body::updateVertices()
             vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
             vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
 
-            //normal ska vara 0 1 0 
+            //normal ska vara 0 1 0
             vertexarray.push_back(0.0f);
             vertexarray.push_back(1.0f);
             vertexarray.push_back(0.0f);
@@ -285,7 +290,7 @@ void Body::updateVertices()
 
     }
 
-    
+
 }
 
 void Body::updateGL()
@@ -375,7 +380,7 @@ void Body::initGL()
             vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
             vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
 
-            //normal ska vara -1 0 0 
+            //normal ska vara -1 0 0
             vertexarray.push_back(-1.0f);
             vertexarray.push_back(0.0f);
             vertexarray.push_back(0.0f);
@@ -396,7 +401,7 @@ void Body::initGL()
             vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
             vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
 
-            //normal ska vara 0 1 0 
+            //normal ska vara 0 1 0
             vertexarray.push_back(0.0f);
             vertexarray.push_back(1.0f);
             vertexarray.push_back(0.0f);
