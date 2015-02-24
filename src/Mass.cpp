@@ -30,46 +30,53 @@ void Mass::update(float timeDelta, std::vector<std::shared_ptr<Boundary>> bounda
 {
     if (!mIsStatic)
     {
-        glm::vec3 F = glm::vec3(0.0f);
-
-        if (gravityActive)
-        {
-            F = F + glm::vec3(0.0f, -9.81f, 0.0f) * mMass;
-        }
-
-        // For each connected mass, calculate the force
-        for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
-        {
-            // vector from this point to the (*it) point
-            glm::vec3 toPoint = mPosition - (*it)->getPosition();
-
-            // get the length of the spring in rest
-            float springLength = glm::length((*it)->getInitialPosition() - mInitialPosition);
-
-            // the spring's initial position as a vector
-            glm::vec3 springVector = glm::normalize(toPoint) * springLength;
-
-            //Spring force, Hook's
-            F = F - (toPoint - springVector) * mSpringConstant;
-
-            //Difference in velocity
-            glm::vec3 velocityDifference = ((*it)->getVelocity() - mVelocity);
-
-            //Damping
-            F = F + (velocityDifference) * mDampingConstant;
-        }
-
+        // collision detection needs this
         glm::vec3 oldPos = mPosition;
 
-        //EULER
-        rungeKutta(F, timeDelta);
+        // numerical integration method
+        rungeKutta(timeDelta);
 
         // collision detection!
-        for (std::vector<std::shared_ptr<Boundary>>::iterator it = boundaries.begin(); it != boundaries.end(); ++it)
+        for (std::vector<std::shared_ptr<Boundary>>::iterator b = boundaries.begin(); b != boundaries.end(); ++b)
         {
-            (*it)->getProperPosition(mPosition, oldPos, mVelocity);
+            (*b)->getProperPosition(mPosition, oldPos, mVelocity);
         }
     }
+}
+
+glm::vec3 Mass::accel(glm::vec3 prevVelocity, glm::vec3 prevPosition)
+{
+    glm::vec3 F = glm::vec3(0.0f);
+
+    if (gravityActive)
+    {
+        F = F + glm::vec3(0.0f, -9.81f, 0.0f) * mMass;
+    }
+
+    // For each connected mass, calculate the force
+    for (std::vector<Mass*>::iterator it = mConnectedMasses.begin(); it != mConnectedMasses.end(); ++it)
+    {
+        // vector from this point to the (*it) point
+        glm::vec3 toPoint = prevPosition - (*it)->getPosition();
+
+        // get the length of the spring in rest
+        float springLength = glm::length((*it)->getInitialPosition() - mInitialPosition);
+
+        // the spring's initial position as a vector
+        glm::vec3 springVector = glm::normalize(toPoint) * springLength;
+
+        //Spring force, Hook's
+        F = F - (toPoint - springVector) * mSpringConstant;
+
+        //Difference in velocity
+        glm::vec3 velocityDifference = ((*it)->getVelocity() - prevVelocity);
+
+        //Damping
+        F = F + (velocityDifference) * mDampingConstant;
+    }
+
+    // newton III: F = m*a
+    return F/mMass;
 }
 
 void Mass::explicitEuler(glm::vec3 force, float h)
@@ -93,23 +100,22 @@ void Mass::implicitEuler(glm::vec3 force, float h)
 }
 
 
-void Mass::rungeKutta(glm::vec3 force, float h)
+void Mass::rungeKutta(float h)
 {
-    float two = 2.0;
+    glm::vec3 kv1 = accel(mVelocity, mPosition);
+    glm::vec3 kx1 = mVelocity;
 
-    glm::vec3 a = force / mMass;
+    glm::vec3 kv2 = accel(mVelocity + kv1 * (h / 2.0f), mPosition + kx1 * (h / 2.0f));
+    glm::vec3 kx2 = mVelocity + (h / 2.0f) * kv1;
 
-    glm::vec3 kv1 = a * h;
-    glm::vec3 kv2 = a * h + ((h * h) / 2) * kv1;
-    glm::vec3 kv3 = a * h + ((h * h) / 2) * kv2;
-    glm::vec3 kv4 = a * h + h * h * kv3;
-    mVelocity = mVelocity + ((1 / 6.f) * (kv1 + (two * kv2) + (two * kv3) + kv4));
+    glm::vec3 kv3 = accel(mVelocity + kv2 * (h / 2.0f), mPosition + kx2 * (h / 2.0f));
+    glm::vec3 kx3 = mVelocity + (h / 2.0f) * kv2;
 
-    glm::vec3 kx1 = mVelocity * h;
-    glm::vec3 kx2 = mVelocity * h + ((h * h) / 2) * kx1;
-    glm::vec3 kx3 = mVelocity * h + ((h * h) / 2) * kx2;
-    glm::vec3 kx4 = mVelocity * h + h * kx3;
-    mPosition = mPosition + (1 / 6.f) * (kx1 + (two * kx2) + (two * kx3) + kx4);
+    glm::vec3 kv4 = accel(mVelocity + kv3 * h, mPosition + kx3 * h);
+    glm::vec3 kx4 = mVelocity + h * kv3;
+
+    mVelocity = mVelocity + (h / 6.0f) * (kv1 + (2.0f * kv2) + (2.0f * kv3) + kv4);
+    mPosition = mPosition + (h / 6.0f) * (kx1 + (2.0f * kx2) + (2.0f * kx3) + kx4);
 }
 
 void Mass::connectMass(std::shared_ptr<Mass> m)

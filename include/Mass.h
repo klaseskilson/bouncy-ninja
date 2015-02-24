@@ -20,7 +20,7 @@ class Mass
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 1200.0f, float damping = 7.0f);
+    Mass(glm::vec3 pos, float spring = 4000.0f, float damping = 7.0f);
 
     //Destructor
     ~Mass();
@@ -55,9 +55,11 @@ public:
     //Initializes each vertex with a box for debug purposes
     void createDebugBox(float xsize, float ysize, float zsize);
 
+    glm::vec3 accel(glm::vec3, glm::vec3);
+
     void explicitEuler(glm::vec3 force, float h);
     void implicitEuler(glm::vec3 force, float h);
-    void rungeKutta(glm::vec3 force, float h);
+    void rungeKutta(float h);
 
     std::vector<Mass*> mConnectedMasses;
 
@@ -66,7 +68,7 @@ private:
     static bool gravityActive;
 
     // physics stuff
-    float mMass = 10.0f;
+    float mMass = 5.0f;
     float mSpringConstant, mDampingConstant;
 
     // decide if point can move
