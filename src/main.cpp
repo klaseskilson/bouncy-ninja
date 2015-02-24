@@ -18,6 +18,7 @@
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void updateCamera();
 
 bool gRunSimulation = true, gDrawPolygons = false;
@@ -65,6 +66,8 @@ int main()
     //setup mouse event function
     glfwSetCursorPosCallback(window, cursor_position_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // setup scroll callback
+    glfwSetScrollCallback(window, scroll_callback);
 
 
     // get version info
@@ -181,6 +184,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     {
         gDrawPolygons = !gDrawPolygons;
     }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    // std::cout << "scroll: " << yoffset << std::endl;
+    gCam.cam.x += yoffset;
+    gCam.cam.x = fmax(gCam.cam.x, 0.5);
 }
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
