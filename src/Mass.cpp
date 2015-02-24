@@ -34,7 +34,7 @@ void Mass::update(float timeDelta, std::vector<std::shared_ptr<Boundary>> bounda
         glm::vec3 oldPos = mPosition;
 
         // numerical integration method
-        rungeKutta(timeDelta);
+        explicitEuler(timeDelta);
 
         // collision detection!
         for (std::vector<std::shared_ptr<Boundary>>::iterator b = boundaries.begin(); b != boundaries.end(); ++b)
@@ -79,11 +79,10 @@ glm::vec3 Mass::accel(glm::vec3 prevVelocity, glm::vec3 prevPosition)
     return F/mMass;
 }
 
-void Mass::explicitEuler(glm::vec3 force, float h)
+void Mass::explicitEuler(float h)
 {
-    glm::vec3 a = force / mMass;
+    glm::vec3 a = accel(mVelocity, mPosition);
     mVelocity = mVelocity + a * h;
-    //std::cout << mVelocity << "\n";
     mPosition = mPosition + mVelocity * h;
 }
 
