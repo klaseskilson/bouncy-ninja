@@ -8,7 +8,7 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createBox(5, 5, 5, 0.3, glm::vec3(1.0,1.0,1.0));
+    createBox(2, 3, 4, 0.3, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
@@ -158,10 +158,354 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
 
 
     //OpenGL Initialization
+    initGL();
+}
+
+void Body::updateVertices()
+{
+    vertexarray.clear();
+    
+    for (int i = 0; i < xSize*ySize; i++)
+    {
+        vertices.push_back(mMasses.at(i)->getPosition());
+
+        vertexarray.push_back(mMasses.at(i)->getPosition().x);
+        vertexarray.push_back(mMasses.at(i)->getPosition().y);
+        vertexarray.push_back(mMasses.at(i)->getPosition().z);
+
+        //normal ska vara 0 0 -1
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(-1.0f);
+
+
+        vertexarray.push_back(1.0f);
+        vertexarray.push_back(0.0f);
+    }
+
+    //Back
+    for (int i = (xSize*ySize)*(zSize - 1); i < (xSize * ySize * zSize); i++)
+    {
+        vertices.push_back(mMasses.at(i)->getPosition());
+
+        vertexarray.push_back(mMasses.at(i)->getPosition().x);
+        vertexarray.push_back(mMasses.at(i)->getPosition().y);
+        vertexarray.push_back(mMasses.at(i)->getPosition().z);
+
+        //normal ska vara 0 0 1
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(1.0f);
+
+        vertexarray.push_back(1.0f);
+        vertexarray.push_back(0.0f);
+    }
+    //Right
+    for (int i = xSize - 1; i < xSize*ySize; i += xSize)
+    {
+        for (int j = 0; j < (zSize - 1)*xSize*ySize + 1; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara 1 0 0
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+    }
+
+    //left
+    for (int i = 0; i < xSize*(ySize - 1) + 1; i += xSize)
+    {
+        for (int j = 0; j < (zSize - 1)*xSize*ySize + 1; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara -1 0 0 
+            vertexarray.push_back(-1.0f);
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+    }
+
+    //top
+    for (int i = 0; i < xSize; i++)
+    {
+        for (int j = 0; j < xSize*ySize*(zSize - 1) + 1; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara 0 1 0 
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+
+    }
+    //bottom
+    for (int i = xSize * (ySize - 1); i < xSize * (ySize - 1) + xSize; i++)
+    {
+        for (int j = 0; j < xSize*ySize*zSize; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara 0 -1 0
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(-1.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+
+    }
+
+    
+}
+
+void Body::updateGL()
+{
     updateVertices();
 
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, 8 * numberOfVertices * sizeof(GLfloat), &(vertexarray[0]), GL_STATIC_DRAW);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+}
+
+void Body::initGL()
+{
+    vertexarray.clear();
+    vertices.clear();
+    indices.clear();
+
+    //OpenGL Initialization
+    //Front
+    for (int i = 0; i < xSize*ySize; i++)
+    {
+        vertices.push_back(mMasses.at(i)->getPosition());
+
+        vertexarray.push_back(mMasses.at(i)->getPosition().x);
+        vertexarray.push_back(mMasses.at(i)->getPosition().y);
+        vertexarray.push_back(mMasses.at(i)->getPosition().z);
+
+        //normal ska vara 0 0 -1
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(-1.0f);
+
+
+        vertexarray.push_back(1.0f);
+        vertexarray.push_back(0.0f);
+    }
+
+    //Back
+    for (int i = (xSize*ySize)*(zSize - 1); i < (xSize * ySize * zSize); i++)
+    {
+        vertices.push_back(mMasses.at(i)->getPosition());
+
+        vertexarray.push_back(mMasses.at(i)->getPosition().x);
+        vertexarray.push_back(mMasses.at(i)->getPosition().y);
+        vertexarray.push_back(mMasses.at(i)->getPosition().z);
+
+        //normal ska vara 0 0 1
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(0.0f);
+        vertexarray.push_back(1.0f);
+
+        vertexarray.push_back(1.0f);
+        vertexarray.push_back(0.0f);
+    }
+    //Right
+    for (int i = xSize - 1; i < xSize*ySize; i += xSize)
+    {
+        for (int j = 0; j < (zSize - 1)*xSize*ySize + 1; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara 1 0 0
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+    }
+
+    //left
+    for (int i = 0; i < xSize*(ySize - 1) + 1; i += xSize)
+    {
+        for (int j = 0; j < (zSize - 1)*xSize*ySize + 1; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara -1 0 0 
+            vertexarray.push_back(-1.0f);
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+    }
+
+    //top
+    for (int i = 0; i < xSize; i++)
+    {
+        for (int j = 0; j < xSize*ySize*(zSize - 1) + 1; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara 0 1 0 
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+
+    }
+    //bottom
+    for (int i = xSize * (ySize - 1); i < xSize * (ySize - 1) + xSize; i++)
+    {
+        for (int j = 0; j < xSize*ySize*zSize; j += xSize*ySize)
+        {
+            vertices.push_back(mMasses.at(i + j)->getPosition());
+
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
+            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
+
+            //normal ska vara 0 -1 0
+            vertexarray.push_back(0.0f);
+            vertexarray.push_back(-1.0f);
+            vertexarray.push_back(0.0f);
+
+            vertexarray.push_back(1.0f);
+            vertexarray.push_back(0.0f);
+        }
+
+    }
+
+    for (int k = 0; k < 2; k++)
+    {
+        for (int i = 0; i < xSize - 1; i++)
+        {
+            for (int j = 0; j < ySize - 1; j++)
+            {
+                unsigned short n1 = i + j*xSize + xSize*ySize*k;
+                unsigned short n2 = i + xSize * (j + 1) + xSize*ySize * k;
+                unsigned short n3 = (i + 1 + xSize * (j + 1)) + xSize*ySize* k;
+                unsigned short n4 = i + 1 + xSize * j + xSize*ySize * k;
+
+                //TODO: Calculate normals
+                indices.push_back(n1);
+                indices.push_back(n2);
+                indices.push_back(n3);
+                indices.push_back(n3);
+                indices.push_back(n4);
+                indices.push_back(n1);
+            }
+        }
+    }
+
+    //Sides
+
+    for (int k = 0; k < 2; k++)
+    {
+        int offset = 2 * xSize*ySize + ySize*zSize*k;
+        for (int j = 0; j < ySize - 1; j++)
+        {
+            for (int i = 0; i < zSize - 1; i++)
+            {
+                unsigned short n1 = i + j*zSize + offset;
+                unsigned short n2 = i + zSize * (j + 1) + offset;
+                unsigned short n3 = i + 1 + zSize * (j + 1) + offset;
+                unsigned short n4 = i + 1 + zSize * j + offset;
+
+
+                //TODO: Calculate normals
+
+                indices.push_back(n1);
+                indices.push_back(n2);
+                indices.push_back(n3);
+                indices.push_back(n3);
+                indices.push_back(n4);
+                indices.push_back(n1);
+            }
+        }
+    }
+
+    //Top and bottom
+    for (int k = 0; k < 2; k++)
+    {
+        int offset = xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
+        for (int i = 0; i < zSize - 1; i++)
+        {
+            for (int j = 0; j < xSize - 1; j++)
+            {
+                unsigned short n1 = i + j*zSize + offset;
+                unsigned short n2 = i + zSize * (j + 1) + offset;
+                unsigned short n3 = (i + 1 + zSize * (j + 1)) + offset;
+                unsigned short n4 = i + 1 + zSize * j + offset;
+
+                //std::cout << "Connecting vertices:" << n1 << " " << n2 << " " << n3 << " " << n4 << ". \n";
+
+                //TODO: Calculate normals
+
+                indices.push_back(n1);
+                indices.push_back(n2);
+                indices.push_back(n3);
+                indices.push_back(n3);
+                indices.push_back(n4);
+                indices.push_back(n1);
+            }
+        }
+    }
+
     numberOfTriangles = indices.size() / 3;
-    numberOfVertices = xSize*ySize*2 + ySize*zSize*2 + zSize*xSize*2;
+    numberOfVertices = xSize*ySize * 2 + ySize*zSize * 2 + zSize*xSize * 2;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -197,203 +541,6 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
-
-void Body::updateVertices()
-{
-    vertexarray.clear();
-    vertices.clear();
-    indices.clear();
-
-    //OpenGL Initialization
-    //Front
-    for (int i = 0; i < xSize*ySize; i++)
-    {
-        vertices.push_back(mMasses.at(i)->getPosition());
-
-        vertexarray.push_back(mMasses.at(i)->getPosition().x);
-        vertexarray.push_back(mMasses.at(i)->getPosition().y);
-        vertexarray.push_back(mMasses.at(i)->getPosition().z);
-
-        vertexarray.push_back(0.0f);
-        vertexarray.push_back(0.0f);
-        vertexarray.push_back(-1.0f);
-
-        vertexarray.push_back(1.0f);
-        vertexarray.push_back(0.0f);
-    }
-
-    //Back
-    for (int i = (xSize*ySize)*(zSize - 1); i < (xSize * ySize * zSize); i++)
-    {
-        vertices.push_back(mMasses.at(i)->getPosition());
-
-        vertexarray.push_back(mMasses.at(i)->getPosition().x);
-        vertexarray.push_back(mMasses.at(i)->getPosition().y);
-        vertexarray.push_back(mMasses.at(i)->getPosition().z);
-
-        vertexarray.push_back(0.0f);
-        vertexarray.push_back(0.0f);
-        vertexarray.push_back(1.0f);
-
-        vertexarray.push_back(1.0f);
-        vertexarray.push_back(0.0f);
-    }
-    //Right
-    for (int i = xSize - 1; i < xSize*ySize*zSize; i += xSize)
-    {
-        vertices.push_back(mMasses.at(i)->getPosition());
-
-        vertexarray.push_back(mMasses.at(i)->getPosition().x);
-        vertexarray.push_back(mMasses.at(i)->getPosition().y);
-        vertexarray.push_back(mMasses.at(i)->getPosition().z);
-
-        vertexarray.push_back(1.0f);
-        vertexarray.push_back(0.0f);
-        vertexarray.push_back(0.0f);
-
-        vertexarray.push_back(1.0f);
-        vertexarray.push_back(0.0f);
-    }
-
-    //left
-    for (int i = 0; i < (xSize*ySize*zSize) - xSize + 1; i += xSize)
-    {
-        vertices.push_back(mMasses.at(i)->getPosition());
-
-        vertexarray.push_back(mMasses.at(i)->getPosition().x);
-        vertexarray.push_back(mMasses.at(i)->getPosition().y);
-        vertexarray.push_back(mMasses.at(i)->getPosition().z);
-
-        vertexarray.push_back(-1.0f);
-        vertexarray.push_back(0.0f);
-        vertexarray.push_back(0.0f);
-
-        vertexarray.push_back(1.0f);
-        vertexarray.push_back(0.0f);
-    }
-
-    //top
-    for (int i = 0; i < xSize; i++)
-    {
-        for (int j = 0; j < xSize*ySize*zSize; j += xSize*ySize)
-        {
-            vertices.push_back(mMasses.at(i + j)->getPosition());
-
-            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
-            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
-            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
-
-            vertexarray.push_back(0.0f);
-            vertexarray.push_back(1.0f);
-            vertexarray.push_back(0.0f);
-
-            vertexarray.push_back(1.0f);
-            vertexarray.push_back(0.0f);
-        }
-
-    }
-    //bottom
-    for (int i = xSize * 2; i < xSize * 3; i++)
-    {
-        for (int j = 0; j < xSize*ySize*zSize; j += xSize*ySize)
-        {
-            vertices.push_back(mMasses.at(i + j)->getPosition());
-
-            vertexarray.push_back(mMasses.at(i + j)->getPosition().x);
-            vertexarray.push_back(mMasses.at(i + j)->getPosition().y);
-            vertexarray.push_back(mMasses.at(i + j)->getPosition().z);
-
-            vertexarray.push_back(0.0f);
-            vertexarray.push_back(-1.0f);
-            vertexarray.push_back(0.0f);
-
-            vertexarray.push_back(1.0f);
-            vertexarray.push_back(0.0f);
-        }
-
-    }
-
-    for (int k = 0; k < 2; k++)
-    {
-        for (int i = 0; i < xSize - 1; i++)
-        {
-            for (int j = 0; j < ySize - 1; j++)
-            {
-                unsigned short n1 = i + j*xSize               + xSize*ySize*k;
-                unsigned short n2 = i + xSize * (j + 1)       + xSize*ySize * k;
-                unsigned short n3 = (i + 1 + xSize * (j + 1)) + xSize*ySize* k;
-                unsigned short n4 = i + 1 + xSize * j         + xSize*ySize * k;
-
-                //TODO: Calculate normals
-                indices.push_back(n1);
-                indices.push_back(n2);
-                indices.push_back(n3);
-                indices.push_back(n3);
-                indices.push_back(n4);
-                indices.push_back(n1);
-            }
-        }
-    }
-    for (int k = 0; k < 2; k++)
-    {
-        for (int i = 0; i < zSize - 1; i++)
-        {
-            for (int j = 0; j < ySize - 1; j++)
-            {
-                unsigned short n1 = i + j*zSize + 2 * xSize*ySize + ySize*zSize*k;
-                unsigned short n2 = i + zSize * (j + 1) + xSize*ySize * 2 + ySize*zSize*k;
-                unsigned short n3 = (i + 1 + zSize * (j + 1)) + xSize*ySize * 2 + ySize*zSize*k;
-                unsigned short n4 = i + 1 + zSize * j + xSize*ySize * 2 + ySize*zSize*k;
-
-                //TODO: Calculate normals
-
-                indices.push_back(n1);
-                indices.push_back(n2);
-                indices.push_back(n3);
-                indices.push_back(n3);
-                indices.push_back(n4);
-                indices.push_back(n1);
-            }
-        }
-    }
-
-    //Top and bottom
-    for (int k = 0; k < 2; k++)
-    {
-        for (int i = 0; i < xSize - 1; i++)
-        {
-            for (int j = 0; j < zSize - 1; j++)
-            {
-                unsigned short n1 = i + j*xSize               + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
-                unsigned short n2 = i + xSize * (j + 1)       + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
-                unsigned short n3 = (i + 1 + xSize * (j + 1)) + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
-                unsigned short n4 = i + 1 + xSize * j         + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
-
-                //TODO: Calculate normals
-
-                indices.push_back(n1);
-                indices.push_back(n2);
-                indices.push_back(n3);
-                indices.push_back(n3);
-                indices.push_back(n4);
-                indices.push_back(n1);
-            }
-        }
-    }
-}
-
-void Body::updateGL()
-{
-    updateVertices();
-
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, 8 * numberOfVertices * sizeof(GLfloat), &(vertexarray[0]), GL_STATIC_DRAW);
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-}
-
 void Body::loadObj(const char * path)
 {
     std::vector<glm::vec3> out_vertices;

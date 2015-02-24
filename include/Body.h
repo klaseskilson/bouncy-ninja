@@ -42,6 +42,7 @@ public:
 
 private:
     void updateGL();
+    void initGL();
     void updateVertices();
 
     static bool mDebug;
