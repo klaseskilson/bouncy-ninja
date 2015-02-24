@@ -57,8 +57,8 @@ public:
 
     glm::vec3 accel(glm::vec3, glm::vec3);
 
-    void explicitEuler(glm::vec3 force, float h);
-    void implicitEuler(glm::vec3 force, float h);
+    void explicitEuler(float h);
+    void implicitEuler(float h);
     void rungeKutta(float h);
 
     std::vector<Mass*> mConnectedMasses;
