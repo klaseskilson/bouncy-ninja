@@ -24,7 +24,7 @@ public:
     void addBoundary(std::shared_ptr<Boundary>);
     std::vector<std::shared_ptr<Boundary>> getBoundaries();
 
-    void createCube(int nMasses, float massDistance, glm::vec3 sPoint);
+    void createBox(int xSize, int ySize, int zSize, float massDistance, glm::vec3 sPoint);
     void createRope(int nMasses, float width, glm::vec3 sPoint);
     void loadObj(const char * path);
 
@@ -44,7 +44,7 @@ private:
     std::vector<std::shared_ptr<Mass>> mMasses;
     std::vector<std::shared_ptr<Boundary>> mBoundaries;
 
-    int boxSize;
+    int xSize, ySize, zSize;
     //GL variables
     static GLShader* basicShader;
 

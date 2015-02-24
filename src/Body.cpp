@@ -8,7 +8,7 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createCube(5, 0.3, glm::vec3(1.0,1.0,1.0));
+    createBox(3 ,6,5, 0.3, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
@@ -107,21 +107,24 @@ void Body::createRope(int length, float width, glm::vec3 sPoint)
     mMasses.at(0)->setStatic(true);
 }
 
-void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
+void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
 {
-    for(int x = 0; x < nMasses; x++)
+    xSize = x;
+    ySize = y;
+    zSize = z;
+    for (int z = 0; z < zSize; z++)
     {
-        for(int y = 0; y < nMasses; y++)
+        for (int y = 0; y < ySize; y++)
         {
-            for(int z = 0; z < nMasses; z++)
+            for (int x = 0; x < xSize; x++)
             {
                 mMasses.push_back(std::shared_ptr<Mass>(
-                    new Mass(glm::vec3(sPoint.x-x*massDistance, sPoint.y-y*massDistance, sPoint.z-z*massDistance))));
+                    new Mass(glm::vec3(sPoint.x+x*massDistance, sPoint.y-y*massDistance, sPoint.z+z*massDistance))));
             }
         }
     }
 
-    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(nMasses * (nMasses + 1) + 1)->getPosition());
+    float radius = glm::length(mMasses.at(0)->getPosition() - mMasses.at(zSize * (ySize + 1) + 1)->getPosition());
 
     for(std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
     {
@@ -136,42 +139,41 @@ void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
         //std::cout << *it << " " << *std::next(it,1) << '\n';
     }
     // connect the corners, only for nMasses > 2
-    if (nMasses > 2)
+    if (xSize > 2 && ySize > 2 && zSize > 2)
     {
         // we are trying to connect the corners, which are found like this
-        //        n*n-1 +------+ n-1
-        //            .'|    .'|
-        //  n(n-1)  +---+--+'  | 0
-        // n*n*n-1  |   +--+---+ n*n(n-1)+n-1
-        //          | .'   | .'
-        // n(n*n-1) +------+' n*n(n-1)
+        //         ySize*xSize*(zSize-1) +------+ xSize*ySize*(zSize-1)+xSize-1
+        //                             .'|    .'|
+        //                        0  +---+--+'  | xSize-1
+        // xSize*((ySize*zSize)-1)   |   +--+---+ (xSize*ySize*zSize)-1
+        //                           | .'   | .'
+        //          (ySize-1)*xSize  +------+' (ySize*xSize)-1
 
-        int n = nMasses;
-
+        int n = xSize;
+        
         // this could be done in a neat loop
-        mMasses.at(0)->connectMass(mMasses.at(n - 1));
-        mMasses.at(0)->connectMass(mMasses.at(n*(n - 1)));
-        mMasses.at(0)->connectMass(mMasses.at(n * n * (n - 1)));
-        mMasses.at(n - 1)->connectMass(mMasses.at(n * n - 1));
-        mMasses.at(n - 1)->connectMass(mMasses.at((n - 1)*(n * n + 1)));
-        mMasses.at(n * (n - 1))->connectMass(mMasses.at(n * n - 1));
-        mMasses.at(n * (n - 1))->connectMass(mMasses.at(n * n * n - n));
-        mMasses.at(n * n - 1)->connectMass(mMasses.at(n * n * n - 1));
-        mMasses.at(n * n * (n - 1))->connectMass(mMasses.at((n - 1)*(n * n + 1)));
-        mMasses.at(n * n * (n - 1))->connectMass(mMasses.at(n * n * n - n));
-        mMasses.at(n * n * n - n)->connectMass(mMasses.at(n * n * n - 1));
-        mMasses.at((n - 1)*(n * n + 1))->connectMass(mMasses.at(n * n * n - 1));
+        mMasses.at(0)->connectMass(mMasses.at(xSize-1));
+        mMasses.at(0)->connectMass(mMasses.at((ySize-1)*xSize));
+        mMasses.at(0)->connectMass(mMasses.at(ySize*xSize*(zSize-1)));
+        mMasses.at(xSize - 1)->connectMass(mMasses.at((ySize*xSize) - 1));
+        mMasses.at(xSize - 1)->connectMass(mMasses.at(xSize*ySize*(zSize - 1) + xSize - 1));
+        mMasses.at((ySize*xSize) - 1)->connectMass(mMasses.at((ySize - 1)*xSize));
+        mMasses.at((ySize*xSize) - 1)->connectMass(mMasses.at((xSize*ySize*zSize) - 1));
+        mMasses.at((ySize - 1)*xSize)->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
+        mMasses.at(ySize*xSize*(zSize - 1))->connectMass(mMasses.at(xSize*ySize*(zSize - 1) + xSize - 1));
+        mMasses.at(ySize*xSize*(zSize - 1))->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
+        mMasses.at(xSize*ySize*(zSize - 1) + xSize - 1)->connectMass(mMasses.at((xSize*ySize*zSize) - 1));
+        mMasses.at((xSize*ySize*zSize) - 1)->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
+        
     }
 
 
 
     //OpenGL Initialization
-    boxSize = nMasses;
-
     updateVertices();
 
     numberOfTriangles = indices.size() / 3;
-    numberOfVertices = boxSize*boxSize*6;
+    numberOfVertices = xSize*ySize*2 + ySize*zSize*2 + zSize*xSize*2;
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
@@ -211,10 +213,12 @@ void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
 void Body::updateVertices()
 {
     vertexarray.clear();
+    vertices.clear();
+    indices.clear();
 
     //OpenGL Initialization
     //Front
-    for (int i = 0; i < boxSize*boxSize; i++)
+    for (int i = 0; i < xSize*ySize; i++)
     {
         vertices.push_back(mMasses.at(i)->getPosition());
 
@@ -222,16 +226,16 @@ void Body::updateVertices()
         vertexarray.push_back(mMasses.at(i)->getPosition().y);
         vertexarray.push_back(mMasses.at(i)->getPosition().z);
 
-        vertexarray.push_back(1.0f);
         vertexarray.push_back(0.0f);
         vertexarray.push_back(0.0f);
+        vertexarray.push_back(-1.0f);
 
         vertexarray.push_back(1.0f);
         vertexarray.push_back(0.0f);
     }
 
     //Back
-    for (int i = (boxSize*boxSize)*(boxSize - 1); i < (boxSize*boxSize*boxSize); i++)
+    for (int i = (xSize*ySize)*(zSize - 1); i < (xSize * ySize * zSize); i++)
     {
         vertices.push_back(mMasses.at(i)->getPosition());
 
@@ -239,15 +243,15 @@ void Body::updateVertices()
         vertexarray.push_back(mMasses.at(i)->getPosition().y);
         vertexarray.push_back(mMasses.at(i)->getPosition().z);
 
-        vertexarray.push_back(-1.0f);
         vertexarray.push_back(0.0f);
         vertexarray.push_back(0.0f);
+        vertexarray.push_back(1.0f);
 
         vertexarray.push_back(1.0f);
         vertexarray.push_back(0.0f);
     }
     //Right
-    for (int i = boxSize - 1; i < boxSize*boxSize*boxSize; i += boxSize)
+    for (int i = xSize - 1; i < xSize*ySize*zSize; i += xSize)
     {
         vertices.push_back(mMasses.at(i)->getPosition());
 
@@ -255,16 +259,16 @@ void Body::updateVertices()
         vertexarray.push_back(mMasses.at(i)->getPosition().y);
         vertexarray.push_back(mMasses.at(i)->getPosition().z);
 
+        vertexarray.push_back(1.0f);
         vertexarray.push_back(0.0f);
         vertexarray.push_back(0.0f);
-        vertexarray.push_back(-1.0f);
 
         vertexarray.push_back(1.0f);
         vertexarray.push_back(0.0f);
     }
 
     //left
-    for (int i = 0; i < (boxSize*boxSize*boxSize) - boxSize + 1; i += boxSize)
+    for (int i = 0; i < (xSize*ySize*zSize) - xSize + 1; i += xSize)
     {
         vertices.push_back(mMasses.at(i)->getPosition());
 
@@ -272,18 +276,18 @@ void Body::updateVertices()
         vertexarray.push_back(mMasses.at(i)->getPosition().y);
         vertexarray.push_back(mMasses.at(i)->getPosition().z);
 
+        vertexarray.push_back(-1.0f);
         vertexarray.push_back(0.0f);
         vertexarray.push_back(0.0f);
-        vertexarray.push_back(1.0f);
 
         vertexarray.push_back(1.0f);
         vertexarray.push_back(0.0f);
     }
 
     //top
-    for (int i = 0; i < boxSize; i++)
+    for (int i = 0; i < xSize; i++)
     {
-        for (int j = 0; j < boxSize*boxSize*boxSize; j += boxSize*boxSize)
+        for (int j = 0; j < xSize*ySize*zSize; j += xSize*ySize)
         {
             vertices.push_back(mMasses.at(i + j)->getPosition());
 
@@ -301,9 +305,9 @@ void Body::updateVertices()
 
     }
     //bottom
-    for (int i = boxSize * 2; i < boxSize * 3; i++)
+    for (int i = xSize * 2; i < xSize * 3; i++)
     {
-        for (int j = 0; j < boxSize*boxSize*boxSize; j += boxSize*boxSize)
+        for (int j = 0; j < xSize*ySize*zSize; j += xSize*ySize)
         {
             vertices.push_back(mMasses.at(i + j)->getPosition());
 
@@ -321,40 +325,40 @@ void Body::updateVertices()
 
     }
 
-    for (int k = 0; k < 6; k++)
+    for (int k = 0; k < 2; k++)
     {
-        for (int i = 0; i < boxSize - 1; i++)
+        for (int i = 0; i < xSize - 1; i++)
         {
-            for (int j = 0; j < boxSize - 1; j++)
+            for (int j = 0; j < ySize - 1; j++)
             {
-                unsigned short n1 = i + boxSize * j + boxSize*boxSize*k;
-                unsigned short n2 = i + boxSize * (j + 1) + boxSize*boxSize * k;
-                unsigned short n3 = (i + 1 + boxSize * (j + 1)) + boxSize* boxSize* k;
-                unsigned short n4 = i + 1 + boxSize * j + boxSize*boxSize * k;
+                unsigned short n1 = i + j*xSize               + xSize*ySize*k;
+                unsigned short n2 = i + xSize * (j + 1)       + xSize*ySize * k;
+                unsigned short n3 = (i + 1 + xSize * (j + 1)) + xSize*ySize* k;
+                unsigned short n4 = i + 1 + xSize * j         + xSize*ySize * k;
 
                 //TODO: Calculate normals
-                /*
-                glm::vec3 normal1 = glm::normalize(glm::cross(vertices.at(n2) - vertices.at(n1), vertices.at(n4) - vertices.at(n1)));
-                glm::vec3 normal2 = glm::normalize(glm::cross(vertices.at(n1) - vertices.at(n2), vertices.at(n3) - vertices.at(n2)));
-                glm::vec3 normal3 = glm::normalize(glm::cross(vertices.at(n2) - vertices.at(n3), vertices.at(n4) - vertices.at(n3)));
-                glm::vec3 normal4 = glm::normalize(glm::cross(vertices.at(n3) - vertices.at(n4), vertices.at(n1) - vertices.at(n4)));
+                indices.push_back(n1);
+                indices.push_back(n2);
+                indices.push_back(n3);
+                indices.push_back(n3);
+                indices.push_back(n4);
+                indices.push_back(n1);
+            }
+        }
+    }
+    for (int k = 0; k < 2; k++)
+    {
+        for (int i = 0; i < zSize - 1; i++)
+        {
+            for (int j = 0; j < ySize - 1; j++)
+            {
+                unsigned short n1 = i + j*zSize + 2 * xSize*ySize + ySize*zSize*k;
+                unsigned short n2 = i + zSize * (j + 1) + xSize*ySize * 2 + ySize*zSize*k;
+                unsigned short n3 = (i + 1 + zSize * (j + 1)) + xSize*ySize * 2 + ySize*zSize*k;
+                unsigned short n4 = i + 1 + zSize * j + xSize*ySize * 2 + ySize*zSize*k;
 
-                vertexarray.at(8 * n1 + 3) = normal1.x;
-                vertexarray.at(8 * n1 + 4) = normal1.y;
-                vertexarray.at(8 * n1 + 5) = normal1.z;
+                //TODO: Calculate normals
 
-                vertexarray.at(8 * n2 + 3) = normal2.x;
-                vertexarray.at(8 * n2 + 4) = normal2.y;
-                vertexarray.at(8 * n2 + 5) = normal2.z;
-
-                vertexarray.at(8 * n3 + 3) = normal3.x;
-                vertexarray.at(8 * n3 + 4) = normal3.y;
-                vertexarray.at(8 * n3 + 5) = normal3.z;
-
-                vertexarray.at(8 * n4 + 3) = normal4.x;
-                vertexarray.at(8 * n4 + 4) = normal4.y;
-                vertexarray.at(8 * n4 + 5) = normal4.z;
-                */
                 indices.push_back(n1);
                 indices.push_back(n2);
                 indices.push_back(n3);
@@ -365,6 +369,29 @@ void Body::updateVertices()
         }
     }
 
+    //Top and bottom
+    for (int k = 0; k < 2; k++)
+    {
+        for (int i = 0; i < xSize - 1; i++)
+        {
+            for (int j = 0; j < zSize - 1; j++)
+            {
+                unsigned short n1 = i + j*xSize               + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
+                unsigned short n2 = i + xSize * (j + 1)       + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
+                unsigned short n3 = (i + 1 + xSize * (j + 1)) + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
+                unsigned short n4 = i + 1 + xSize * j         + xSize*ySize * 2 + ySize*zSize * 2 + xSize*zSize*k;
+
+                //TODO: Calculate normals
+
+                indices.push_back(n1);
+                indices.push_back(n2);
+                indices.push_back(n3);
+                indices.push_back(n3);
+                indices.push_back(n4);
+                indices.push_back(n1);
+            }
+        }
+    }
 }
 
 void Body::updateGL()

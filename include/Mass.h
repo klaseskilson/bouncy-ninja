@@ -10,7 +10,6 @@
 #include <iostream>
 #include <memory>
 
-// #include "Body.h"
 #include "bouncy_helpers.h"
 #include "GLShader.h"
 #include "Boundary.h"
@@ -58,7 +57,7 @@ public:
     glm::vec3 accel(glm::vec3, glm::vec3);
 
     void explicitEuler(float h);
-    void implicitEuler(glm::vec3 force, float h);
+    void implicitEuler(float h);
     void rungeKutta(float h);
 
     std::vector<Mass*> mConnectedMasses;
