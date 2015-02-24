@@ -19,26 +19,30 @@ public:
 
     void draw();
     void update(float timeDelta);
-    void move();
 
+    // return the position of the center-most mass
+    glm::vec3 getCenter();
+
+    // boundaries
     void addBoundary(std::shared_ptr<Boundary>);
     std::vector<std::shared_ptr<Boundary>> getBoundaries();
 
+    // object creation
     void createBox(int xSize, int ySize, int zSize, float massDistance, glm::vec3 sPoint);
-    void createRope(int nMasses, float width, glm::vec3 sPoint);
+    void createRope(int length, glm::vec3 startPoint);
     void loadObj(const char * path);
 
+    // interaction
     void hit();
+    static void toggleDebug() {mDebug = !mDebug;}
 
+    // shader handeling
     static void setShader(GLShader* shader);
     static GLShader* getShader();
-
-    static void toggleDebug() {mDebug = !mDebug;}
 
 private:
     void updateGL();
     void updateVertices();
-
 
     static bool mDebug;
     std::vector<std::shared_ptr<Mass>> mMasses;

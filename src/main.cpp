@@ -23,6 +23,8 @@ bool gRunSimulation = true, gDrawPolygons = false;
 float mouseXPos;
 float mouseYPos;
 
+glm::vec3 gBodyCenter = glm::vec3(0.0f);
+
 int main()
 {
     printf("Initiating...\n");
@@ -137,6 +139,8 @@ int main()
         wall->draw();
         theBody.draw();
 
+        gBodyCenter = theBody.getCenter();
+
         //FPS counter
         nbrOfFrames++;
         //Only update once every second
@@ -199,8 +203,8 @@ void updateCamera()
 
 
     glm::mat4 View = glm::lookAt(
-        cameraPos, // Camera is at (10,10,10), in World Space
-        glm::vec3(0, 0, 0), // and looks at the origin
+        gBodyCenter + cameraPos, // Camera is at (10,10,10), in World Space
+        gBodyCenter, // and looks at the center of the object
         glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 

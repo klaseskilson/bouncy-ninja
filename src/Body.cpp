@@ -8,20 +8,11 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createBox(3 ,6,5, 0.3, glm::vec3(1.0,1.0,1.0));
+    createBox(5, 5, 5, 0.3, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
-    mMasses.at(0)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(1)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(2)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(3)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(4)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(25+0)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(25+1)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(25+2)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(25+3)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
-    mMasses.at(25+4)->setVelocity(glm::vec3(-10.0f, 0.0f, 0.0f));
+    hit();
 }
 
 Body::~Body()
@@ -34,7 +25,7 @@ void Body::hit()
 {
     for (std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
     {
-        (*it)->setVelocity(glm::vec3(1.0f));
+        (*it)->setVelocity(glm::vec3(-30.0f, 10.0f, 0.0f));
     }
 }
 
@@ -73,6 +64,12 @@ void Body::update(float timeDelta)
     }
 }
 
+glm::vec3 Body::getCenter()
+{
+    int index = floor(xSize/2.0f) * floor(ySize/2.0f) * floor(zSize/2.0f);
+    return mMasses.at(index)->getPosition();
+}
+
 void Body::addBoundary(std::shared_ptr<Boundary> b)
 {
     mBoundaries.push_back(b);
@@ -93,18 +90,9 @@ GLShader* Body::getShader()
     return basicShader;
 }
 
-// TODO: implement width and make the rope 2*2*length
-void Body::createRope(int length, float width, glm::vec3 sPoint)
+void Body::createRope(int length, glm::vec3 sPoint)
 {
-    for (int i = 0; i < length; i++)
-    {
-        mMasses.push_back(std::shared_ptr<Mass>(new Mass(glm::vec3(0.1f*(float)i, 6.0f, 0.0f))));
-        if (i > 0)
-        {
-            mMasses.at(i)->connectMass(mMasses.at(i - 1));
-        }
-    }
-    mMasses.at(0)->setStatic(true);
+    createBox(2, length, 2, 0.3f, sPoint);
 }
 
 void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
@@ -150,7 +138,7 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
         //          (ySize-1)*xSize  +------+' (ySize*xSize)-1
 
         int n = xSize;
-        
+
         // this could be done in a neat loop
         mMasses.at(0)->connectMass(mMasses.at(xSize-1));
         mMasses.at(0)->connectMass(mMasses.at((ySize-1)*xSize));
@@ -164,7 +152,7 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
         mMasses.at(ySize*xSize*(zSize - 1))->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
         mMasses.at(xSize*ySize*(zSize - 1) + xSize - 1)->connectMass(mMasses.at((xSize*ySize*zSize) - 1));
         mMasses.at((xSize*ySize*zSize) - 1)->connectMass(mMasses.at(xSize*((ySize*zSize) - 1)));
-        
+
     }
 
 
