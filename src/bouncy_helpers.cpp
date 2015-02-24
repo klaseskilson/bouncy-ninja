@@ -2,9 +2,10 @@
 
 glm::vec3 pow(glm::vec3 v, int e)
 {
+    glm::vec3 a = v;
     for (int i = 1; i < e; ++i)
     {
-        v *= v;
+        a *= v;
     }
     return v;
 }
