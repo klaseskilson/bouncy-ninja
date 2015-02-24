@@ -22,6 +22,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #------------------------------------------------------------------
 set(bouncy_SOURCES
   src/main.cpp
+  include/CameraProp.h
   src/bouncy_helpers.cpp include/bouncy_helpers.h
   src/Body.cpp include/Body.h
   src/Boundary.cpp include/Boundary.h

@@ -13,6 +13,7 @@
 
 #include "Body.h"
 #include "Boundary.h"
+#include "CameraProp.h"
 #include "Mass.h"
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
@@ -20,10 +21,8 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void updateCamera();
 
 bool gRunSimulation = true, gDrawPolygons = false;
-float mouseXPos;
-float mouseYPos;
 
-glm::vec3 gBodyCenter = glm::vec3(0.0f);
+CameraProp gCam;
 
 int main()
 {
@@ -139,7 +138,7 @@ int main()
         wall->draw();
         theBody.draw();
 
-        gBodyCenter = theBody.getCenter();
+        gCam.obj = theBody.getCenter();
 
         //FPS counter
         nbrOfFrames++;
@@ -186,8 +185,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
-    mouseXPos = xpos;
-    mouseYPos = ypos;
+    gCam.xMouse = xpos;
+    gCam.yMouse = ypos;
 }
 
 void updateCamera()
@@ -196,15 +195,13 @@ void updateCamera()
     glUseProgram(Mass::getShader()->programID);
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     // Camera matrix
-    glm::mat4 rotationMat = glm::eulerAngleYZ(mouseXPos*0.01f, mouseYPos*0.01f);
-    glm::vec4 cameraPosition = glm::vec4(7.0f, 0.0f, 7.0f,1.0f) * rotationMat;
+    glm::mat4 rotationMat = glm::eulerAngleYZ(gCam.xMouse*0.01f, gCam.yMouse*0.01f);
+    glm::vec4 cameraPosition = gCam.cam * rotationMat;
     glm::vec3 cameraPos = glm::vec3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-    //glm::vec3 cameraPos = glm::vec3(0.0f, 7.0f, 10.0f);
-
 
     glm::mat4 View = glm::lookAt(
-        gBodyCenter + cameraPos, // Camera is at (10,10,10), in World Space
-        gBodyCenter, // and looks at the center of the object
+        gCam.obj + cameraPos, // Camera starts at (7,0,0), in World Space
+        gCam.obj, // and looks at the center of the object
         glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 
