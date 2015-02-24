@@ -8,7 +8,7 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createCube(4, 0.8, glm::vec3(1.0,1.0,1.0));
+    createCube(5, 0.3, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
@@ -28,6 +28,14 @@ Body::~Body()
 {
     mMasses.clear();
     mBoundaries.clear();
+}
+
+void Body::hit()
+{
+    for (std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
+    {
+        (*it)->setVelocity(glm::vec3(1.0f));
+    }
 }
 
 void Body::draw()
@@ -159,7 +167,7 @@ void Body::createCube(int nMasses, float massDistance, glm::vec3 sPoint)
 
     //OpenGL Initialization
     boxSize = nMasses;
-    
+
     updateVertices();
 
     numberOfTriangles = indices.size() / 3;
@@ -330,11 +338,11 @@ void Body::updateVertices()
                 glm::vec3 normal2 = glm::normalize(glm::cross(vertices.at(n1) - vertices.at(n2), vertices.at(n3) - vertices.at(n2)));
                 glm::vec3 normal3 = glm::normalize(glm::cross(vertices.at(n2) - vertices.at(n3), vertices.at(n4) - vertices.at(n3)));
                 glm::vec3 normal4 = glm::normalize(glm::cross(vertices.at(n3) - vertices.at(n4), vertices.at(n1) - vertices.at(n4)));
-                
+
                 vertexarray.at(8 * n1 + 3) = normal1.x;
                 vertexarray.at(8 * n1 + 4) = normal1.y;
                 vertexarray.at(8 * n1 + 5) = normal1.z;
-                
+
                 vertexarray.at(8 * n2 + 3) = normal2.x;
                 vertexarray.at(8 * n2 + 4) = normal2.y;
                 vertexarray.at(8 * n2 + 5) = normal2.z;
@@ -362,13 +370,13 @@ void Body::updateVertices()
 void Body::updateGL()
 {
     updateVertices();
-    
+
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, 8 * numberOfVertices * sizeof(GLfloat), &(vertexarray[0]), GL_STATIC_DRAW);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
+
 }
 
 void Body::loadObj(const char * path)

@@ -27,7 +27,9 @@ public:
     void createCube(int nMasses, float massDistance, glm::vec3 sPoint);
     void createRope(int nMasses, float width, glm::vec3 sPoint);
     void loadObj(const char * path);
-    
+
+    void hit();
+
     static void setShader(GLShader* shader);
     static GLShader* getShader();
 

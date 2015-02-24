@@ -19,7 +19,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void updateCamera();
 
-bool gRunSimulation = true;
+bool gRunSimulation = true, gDrawPolygons = false;
 float mouseXPos;
 float mouseYPos;
 
@@ -95,7 +95,7 @@ int main()
     wall->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
-    float cappedStep = 0.001f;
+    float cappedStep = 0.01f;
     float lastFpsUpdate = 0.0f;
     int nbrOfFrames = 0;
 
@@ -105,6 +105,15 @@ int main()
     {
         // wipe the drawing surface clear
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (gDrawPolygons)
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+        else
+        {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
 
         //Simulation update
         if (gRunSimulation)
@@ -164,6 +173,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {
         gRunSimulation = !gRunSimulation;
+    }
+    if (key == GLFW_KEY_P && action == GLFW_PRESS)
+    {
+        gDrawPolygons = !gDrawPolygons;
     }
 }
 

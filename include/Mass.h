@@ -68,7 +68,7 @@ private:
     static bool gravityActive;
 
     // physics stuff
-    float mMass = 5.0f;
+    float mMass = 10.0f;
     float mSpringConstant, mDampingConstant;
 
     // decide if point can move
