@@ -8,7 +8,7 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createBox(2 ,6,5, 0.5, glm::vec3(1.0,1.0,1.0));
+    createBox(3 ,6,5, 0.3, glm::vec3(1.0,1.0,1.0));
 
     // mMasses.at(0)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
@@ -28,6 +28,14 @@ Body::~Body()
 {
     mMasses.clear();
     mBoundaries.clear();
+}
+
+void Body::hit()
+{
+    for (std::vector<std::shared_ptr<Mass>>::iterator it = mMasses.begin(); it != mMasses.end(); ++it)
+    {
+        (*it)->setVelocity(glm::vec3(1.0f));
+    }
 }
 
 void Body::draw()
@@ -162,8 +170,6 @@ void Body::createBox(int x, int y, int z, float massDistance, glm::vec3 sPoint)
 
 
     //OpenGL Initialization
-    //boxSize = nMasses;
-    
     updateVertices();
 
     numberOfTriangles = indices.size() / 3;
@@ -331,7 +337,6 @@ void Body::updateVertices()
                 unsigned short n4 = i + 1 + xSize * j         + xSize*ySize * k;
 
                 //TODO: Calculate normals
-
                 indices.push_back(n1);
                 indices.push_back(n2);
                 indices.push_back(n3);
@@ -392,13 +397,13 @@ void Body::updateVertices()
 void Body::updateGL()
 {
     updateVertices();
-    
+
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, 8 * numberOfVertices * sizeof(GLfloat), &(vertexarray[0]), GL_STATIC_DRAW);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    
+
 }
 
 void Body::loadObj(const char * path)

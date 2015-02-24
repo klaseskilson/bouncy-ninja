@@ -146,8 +146,8 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
             // limit speed
             vel.x = fmax(0.0f, vel.x);
             // "friction"
-            // vel.y = mFriction * vel.y;
-            // vel.z = mFriction * vel.z;
+            vel.y = mFriction * vel.y;
+            vel.z = mFriction * vel.z;
             pos.x = oldPos.x;
         }
         // negative x-side
