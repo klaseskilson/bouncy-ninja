@@ -1,0 +1,40 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes, shadows, arrows}
+
+\begin{document}
+  \tikzstyle{abstract}=[rectangle, draw=black, rounded corners, fill=blue!40, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+  \tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green!50, drop shadow, anchor=north, text=black, text width=3cm]
+  \tikzstyle{myarrow}=[->, >=open triangle 90, thick]
+  \tikzstyle{line}=[-, thick]
+
+  \begin{tikzpicture}[node distance=1cm]
+    \node (Program) [abstract, rectangle split, rectangle]
+      {
+        \textbf{Programmet}
+        % \nodepart{second}Body\\Boundaries
+      };
+
+    \node (Body) [comment, rectangle split, rectangle split parts=2, below = of Program]
+      {
+        \textbf{Body}
+        \nodepart{second}- Lista över massor\\- Lista över \emph{boundaries}
+      };
+    \node (Mass) [comment, rectangle split, rectangle split parts=2, left = of Body]
+      {
+        \textbf{Mass}
+        \nodepart{second}- Position\\- Urprungsposition\\- Hastighet\\- Lista över anslutna massor
+      };
+    \node (Boundary) [comment, rectangle split, rectangle split parts=2, right = of Body]
+      {
+        \textbf{Boundary}
+        \nodepart{second}- Hörnpunkter\\- Friktion
+      };
+
+    \draw[line] (Program.south) -- (Body.north);
+    \draw[line] (Body.east) -- (Boundary.west);
+    \draw[line] (Body.west) -- (Mass.east);
+  \end{tikzpicture}
+\end{document}

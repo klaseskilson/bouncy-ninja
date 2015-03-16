@@ -1,0 +1,55 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,patterns,decorations.pathmorphing,decorations.markings}
+
+\begin{document}
+  \tikzstyle{line}=[-, thick]
+
+  \begin{tikzpicture}[every node/.style={draw,outer sep=0pt,thick},node distance=1cm]
+
+    \node (a1) [minimum width=1cm,minimum height=1cm,anchor=south] {m};
+    \node (a2) [minimum width=1cm,minimum height=1cm,anchor=south, right=of a1] {m};
+    \node (a3) [minimum width=1cm,minimum height=1cm,anchor=south, right=of a2] {m};
+
+    \node (b1) [minimum width=1cm,minimum height=1cm,anchor=south,below=of a1] {m};
+    \node (b2) [minimum width=1cm,minimum height=1cm,anchor=south, right=of b1] {m};
+    \node (b3) [minimum width=1cm,minimum height=1cm,anchor=south, right=of b2] {m};
+
+    \node (c1) [minimum width=1cm,minimum height=1cm,anchor=south,below=of b1] {m};
+    \node (c2) [minimum width=1cm,minimum height=1cm,anchor=south, right=of c1] {m};
+    \node (c3) [minimum width=1cm,minimum height=1cm,anchor=south, right=of c2] {m};
+
+    \draw[line] (a1.south) -- (b1.north);
+    \draw[line] (b1.south) -- (c1.north);
+    \draw[line] (a2.south) -- (b2.north);
+    \draw[line] (b2.south) -- (c2.north);
+    \draw[line] (a3.south) -- (b3.north);
+    \draw[line] (b3.south) -- (c3.north);
+
+    \draw[line] (a1.east) -- (a2.west);
+    \draw[line] (a2.east) -- (a3.west);
+    \draw[line] (b1.east) -- (b2.west);
+    \draw[line] (b2.east) -- (b3.west);
+    \draw[line] (c1.east) -- (c2.west);
+    \draw[line] (c2.east) -- (c3.west);
+
+    \draw[line] (a1.south east) -- (b2.north west);
+    \draw[line] (b1.south east) -- (c2.north west);
+    \draw[line] (a2.south east) -- (b3.north west);
+    \draw[line] (b2.south east) -- (c3.north west);
+
+    \draw[line] (a2.south west) -- (b1.north east);
+    \draw[line] (a3.south west) -- (b2.north east);
+    \draw[line] (b2.south west) -- (c1.north east);
+    \draw[line] (b3.south west) -- (c2.north east);
+
+    \draw[line,color=blue] (a1.south west) to[out=-100,in=100] (c1.north west);
+    \draw[line,color=blue] (a3.south east) to[out=-80,in=80] (c3.north east);
+
+    \draw[line,color=blue] (a1.north east) to[out=10,in=170] (a3.north west);
+    \draw[line,color=blue] (c1.south east) to[out=-10,in=-170] (c3.south west);
+
+  \end{tikzpicture}
+
+\end{document}
