@@ -19,7 +19,8 @@ class Mass
 public:
     //Constructors
     Mass();
-    Mass(glm::vec3 pos, float spring = 1700.0f, float damping = 20.0f);
+
+    Mass(glm::vec3 pos, float spring = Mass::spring, float damping = Mass::damping);
 
     //Destructor
     ~Mass();
@@ -61,6 +62,9 @@ public:
     void rungeKutta(float h);
 
     std::vector<Mass*> mConnectedMasses;
+
+    static float spring;
+    static float damping;
 
 private:
     static GLShader* basicShader;

@@ -1,6 +1,8 @@
 #include "Mass.h"
 GLShader*  Mass::basicShader;
 bool Mass::gravityActive;
+float Mass::spring;
+float Mass::damping;
 
 Mass::Mass()
 {

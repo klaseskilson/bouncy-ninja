@@ -1,0 +1,52 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,decorations.markings}
+
+\begin{document}
+  \tikzstyle{ground}=[fill,pattern=north east lines,draw=none,minimum width=0.75cm,minimum height=0.3cm]
+
+  \begin{tikzpicture}[every node/.style={draw,outer sep=0pt,thick}]
+    \node (ground) [ground,anchor=north, minimum width=3cm] {};
+    \draw (ground.north west) -- (ground.north east);
+
+    \node (body) at (ground.north) [minimum width=2cm,minimum height=2cm,anchor=south,yshift=0.5cm] {};
+
+    \draw [-latex,ultra thick] (body.north) +(0,1cm) -- ++(0,0.2cm);
+
+    \begin{scope}[xshift=4cm]
+      \node (ground) [ground,anchor=north, minimum width=3cm] {};
+      \draw (ground.north west) -- (ground.north east);
+
+      \node (body) at (ground.north) [minimum width=2cm,minimum height=2cm,anchor=south] {};
+
+      \draw [-latex,ultra thick] (body.north) +(0,1cm) -- ++(0,0.2cm);
+    \end{scope}
+
+    \begin{scope}[xshift=8cm]
+      \node (ground) [ground,anchor=north, minimum width=3cm] {};
+      \draw (ground.north west) -- (ground.north east);
+
+      \node (body) at (ground.north) [minimum width=2cm,minimum height=2cm,color=red,anchor=south,yshift=-0.25cm] {Kollision!};
+
+      \draw [-latex,ultra thick] (body.north) +(0,1cm) -- ++(0,0.2cm);
+    \end{scope}
+
+    \begin{scope}[xshift=12cm]
+      \node (ground) [ground,anchor=north, minimum width=3cm] {};
+      \draw (ground.north west) -- (ground.north east);
+
+      \node (body) at (ground.north) [minimum width=2cm,minimum height=1.75cm,anchor=south] {};
+
+      \draw [-latex,ultra thick] (body.north) ++(0,0.2cm) -- +(0,1cm);
+    \end{scope}
+
+    \begin{scope}[xshift=16cm]
+      \node (ground) [ground,anchor=north, minimum width=3cm] {};
+      \draw (ground.north west) -- (ground.north east);
+
+      \node (body) at (ground.north) [minimum width=2cm,minimum height=2cm,anchor=south] {};
+    \end{scope}
+  \end{tikzpicture}
+
+\end{document}
