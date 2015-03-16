@@ -8,10 +8,13 @@ GLShader* Body::basicShader;
 Body::Body()
 {
     // loadObj("../assets/suzanne.obj");
-    createBox(5, 5, 5, 0.3, glm::vec3(1.0,1.0,1.0));
+    createBox(2, 70, 2, 0.3, glm::vec3(1.0,25.0,1.0));
 
-    // mMasses.at(0)->setStatic(true);
+    mMasses.at(0)->setStatic(true);
+    // mMasses.at(1)->setStatic(true);
     // mMasses.at(2)->setStatic(true);
+    // mMasses.at(3)->setStatic(true);
+
     hit();
 }
 
