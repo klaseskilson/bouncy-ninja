@@ -9,9 +9,9 @@ void main()
   vec3 normal = normalize(interpolatedNormal);
   vec3 toLight2 = normalize(vec3(1.0,2.0,1.0));
   float diffuse = max(0.0, dot(normal, toLight2));
-  float ambient = 0.2 ;
+  float ambient = 0.1 ;
 
   float lightning = diffuse + ambient;
 
-  frag_colour = vec4(0.2, 0.9, 0.2, 1.0) * lightning;
+  frag_colour = vec4(0.8, 0.8, 0.9, 1.0) * lightning;
 }

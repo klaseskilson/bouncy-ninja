@@ -32,7 +32,11 @@ public:
     // destructor
     ~Boundary();
 
-    void setShader(GLShader*);
+    // Set shader, ONLY USED WHEN IN DEBUG MODE.
+
+    static void setShader(GLShader* shader);
+
+    static GLShader* getShader();
 
     void draw();
 
@@ -44,10 +48,10 @@ public:
 private:
     // our corners
     glm::vec3 mA, mB;
-    float mFriction = 0.95f;
+    float mFriction = 0.90f;
 
     //GL variables
-    GLShader* mShader;
+    static GLShader* floorShader;
     GLuint mGlVao;
     int mGlNumberOfVertices;
     int mGlNumberOfTriangles;

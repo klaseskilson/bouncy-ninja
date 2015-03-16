@@ -82,8 +82,11 @@ int main()
 
 
     GLShader* simpleShader = new GLShader("../shaders/simple.vert", "../shaders/simple.frag");
+    GLShader* floorShader = new GLShader("../shaders/floor.vert", "../shaders/floor.frag");
     Mass::setShader(simpleShader);
     Mass::setGravity(true);
+
+    Boundary::setShader(floorShader);
 
     updateCamera();
 
@@ -92,11 +95,9 @@ int main()
     // create our floor and set it up
     std::shared_ptr<Boundary> floor(new Boundary(glm::vec3(-10.0f, -10.0f, -10.0f), glm::vec3(10.0f, -2.9f, 10.0f)));
     theBody.addBoundary(floor);
-    floor->setShader(simpleShader);
     // create wall and set it upp
     std::shared_ptr<Boundary> wall(new Boundary(glm::vec3(-11.0f, -10.0f, -10.0f), glm::vec3(-10.0f, 10.0f, 10.0f)));
     theBody.addBoundary(wall);
-    wall->setShader(simpleShader);
 
     float timeDelta = glfwGetTime();
     float cappedStep = 0.01f;
@@ -202,7 +203,7 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 void updateCamera()
 {
     // Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
-    glUseProgram(Mass::getShader()->programID);
+    
     glm::mat4 Projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     // Camera matrix
     glm::mat4 rotationMat = glm::eulerAngleYZ(gCam.xMouse*0.01f, gCam.yMouse*0.01f);
@@ -215,9 +216,17 @@ void updateCamera()
         glm::vec3(0, 1, 0)  // Head is up (set to 0,-1,0 to look upside-down)
         );
 
+    glUseProgram(Mass::getShader()->programID);
     GLuint MatrixIDV = glGetUniformLocation(Mass::getShader()->programID, "V");
     GLuint MatrixIDP = glGetUniformLocation(Mass::getShader()->programID, "P");
 
     glUniformMatrix4fv(MatrixIDV, 1, GL_FALSE, &View[0][0]);
     glUniformMatrix4fv(MatrixIDP, 1, GL_FALSE, &Projection[0][0]);
+
+    glUseProgram(Boundary::getShader()->programID);
+    GLuint FMatrixIDV = glGetUniformLocation(Boundary::getShader()->programID, "V");
+    GLuint FMatrixIDP = glGetUniformLocation(Boundary::getShader()->programID, "P");
+
+    glUniformMatrix4fv(FMatrixIDV, 1, GL_FALSE, &View[0][0]);
+    glUniformMatrix4fv(FMatrixIDP, 1, GL_FALSE, &Projection[0][0]);
 }
