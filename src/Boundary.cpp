@@ -1,5 +1,7 @@
 #include "Boundary.h"
 
+GLShader*  Boundary::floorShader;
+
 Boundary::Boundary(glm::vec3 a, glm::vec3 b)
 {
     // set corners
@@ -114,7 +116,7 @@ Boundary::~Boundary()
 
 void Boundary::setShader(GLShader* s)
 {
-    mShader = s;
+    floorShader = s;
 }
 
 float Boundary::getTop()
@@ -206,14 +208,19 @@ void Boundary::getProperPosition(glm::vec3 &pos, glm::vec3 oldPos, glm::vec3 &ve
     }
 }
 
+GLShader* Boundary::getShader()
+{
+    return floorShader;
+}
+
 void Boundary::draw()
 {
-    glUseProgram(mShader->programID);
+    glUseProgram(Boundary::getShader()->programID);
 
     // Use identity matrix as our transform matrix
     glm::mat4 transf = glm::mat4();
     // Send our transformation to the currently bound shader
-    GLuint transformID = glGetUniformLocation(mShader->programID, "M");
+    GLuint transformID = glGetUniformLocation(floorShader->programID, "M");
     glUniformMatrix4fv(transformID, 1, GL_FALSE, &transf[0][0]);
 
     glBindVertexArray(mGlVao);
