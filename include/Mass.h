@@ -21,6 +21,7 @@ public:
     Mass();
     Mass(glm::vec3 pos, float spring = Mass::spring, float damping = Mass::damping);
 
+
     //Destructor
     ~Mass();
 
