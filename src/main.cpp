@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h> // GLFW helper library
 #include <stdio.h>
 #include <sstream>
+#include <iostream>
 
 #include "bouncy_helpers.h"
 
@@ -27,6 +28,11 @@ CameraProp gCam;
 
 int main()
 {
+    std::cout << "Choose spring constant: ";
+    std::cin >> Mass::spring;
+    std::cout << "Choose damping constant: ";
+    std::cin >> Mass::damping;
+
     printf("Initiating...\n");
     // start GL context and O/S window using the GLFW helper library
     if (!glfwInit())
@@ -47,8 +53,14 @@ int main()
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     #endif
+    
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+    glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+    glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+    glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "Bouncy Ninja", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(mode->width, mode->height, "Bouncy Ninja", glfwGetPrimaryMonitor(), NULL);
     if (!window)
     {
         fprintf(stderr, "ERROR: could not open window with GLFW3\n");
